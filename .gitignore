@@ -18,3 +18,9 @@ design/
 
 # Local tooling (the preview server). Nothing the published site needs.
 .claude/
+
+# Full-size exports dropped straight into assets/. The site loads the resized
+# copies under assets/case/ — these are the originals, same as the ones in
+# "Case stuy assets/", so keep them local.
+assets/Cs01.png
+assets/Workbench.png

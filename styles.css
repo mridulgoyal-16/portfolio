@@ -66,10 +66,11 @@ img { max-width: 100%; display: block; }
   padding: 100px var(--gutter) 76px;
 }
 
-/* avatar_new.png is a square illustration with its own pink disc, so it needs
-   no cropping — unlike the photo it replaced. The circle is kept only to clip
-   the corners of the source PNG. */
-:root { --avatar-size: 90px; }
+/* avatar_new.png is a square illustration sitting on its own disc — recoloured
+   from the frame's pink to white, so it reads as the page background. It needs
+   no cropping, unlike the photo it replaced; the circle here only clips the
+   corners of the source PNG. */
+:root { --avatar-size: 70px; }
 
 .avatar {
   flex: none;
@@ -242,7 +243,7 @@ img { max-width: 100%; display: block; }
   display: grid;
   grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
   align-items: start;
-  gap: 8px;                           /* hover rectangle → thumbnail */
+  gap: 24px;                          /* hover rectangle → thumbnail */
   /* Asymmetric on purpose: the left is pulled in by the cards' own 16px so
      their text lands at 300, but nothing offsets the right, so the thumbnail
      takes the full gutter and its edge lands at 300 too. */
@@ -292,6 +293,11 @@ img { max-width: 100%; display: block; }
   line-height: 1.4;
   color: var(--ink-year);
 }
+
+/* "Experimental work" — a note rather than a client, so it sits back from the
+   company names. #777 measures 4.48:1 on white, a hair under the 4.5:1 AA
+   line; it was asked for explicitly. #767676 is the lightest grey that passes. */
+.project-org--note { color: #777777; }
 
 
 /* ---------------------------------------------------------------
@@ -416,14 +422,14 @@ img { max-width: 100%; display: block; }
 
 
 /* ---------------------------------------------------------------
-   Hello
+   About
    --------------------------------------------------------------- */
 
-.hello {
+.about {
   padding: var(--panel-top) var(--gutter) 160px;
 }
 
-.hello-intro {
+.about-intro {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
   align-items: stretch;            /* the photo card matches the bio's height */
@@ -530,7 +536,9 @@ img { max-width: 100%; display: block; }
   font-size: 16px;
   font-weight: 500;
   line-height: 1.5;
-  color: #000000;
+  /* Same grey as the "Worked with:" label above — the row reads as one
+     unit, and the logos carry the colour. */
+  color: var(--ink-muted);
 }
 
 .worked-logo {
@@ -552,7 +560,7 @@ img { max-width: 100%; display: block; }
 
 
 /* ---------------------------------------------------------------
-   Hello — contact
+   About — contact
    --------------------------------------------------------------- */
 
 .chit-chat {
@@ -573,10 +581,13 @@ img { max-width: 100%; display: block; }
    Flexbox can't derive this on its own: an <img> contributes its intrinsic
    size to the row height, so stretching it would just measure itself. Re-run
    the sum if the type scale changes. */
+/* blue05 is 720x768, not square like blue04 was. Height stays auto so the
+   mascot keeps its proportions; the width attribute on the img reserves the
+   right box before it loads. */
 .chit-chat-blob {
   flex: none;
   width: 125px;
-  height: 125px;
+  height: auto;
 }
 
 .chit-chat-body {
@@ -658,9 +669,9 @@ img { max-width: 100%; display: block; }
   .visuals-grid img { margin-bottom: 16px; }
   .visuals-grid .is-wide { grid-column: span 1; }
 
-  /* Hello stacks: photo over bio, and the blob sits above the address. */
-  .hello { padding-top: 40px; padding-bottom: 96px; }
-  .hello-intro { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+  /* About stacks: photo over bio, and the blob sits above the address. */
+  .about { padding-top: 40px; padding-bottom: 96px; }
+  .about-intro { grid-template-columns: minmax(0, 1fr); gap: 48px; }
 
   /* Stacked, there is no photo alongside to leave slack, so the auto margin
      would collapse to the 24px gap. Give the section break back explicitly. */
@@ -681,7 +692,7 @@ img { max-width: 100%; display: block; }
   }
   /* Above the text now rather than beside it, so it is sized to look right
      rather than to match anything. */
-  .chit-chat-blob { width: 140px; height: 140px; }
+  .chit-chat-blob { width: 140px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
