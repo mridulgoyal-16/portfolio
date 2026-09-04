@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Source art staged out of Figma. The site loads the exported, resized copies
+# under assets/ — these are the originals and are much larger, so keep them
+# local rather than in the repo.
+Case stuy assets/
+assets/company logos/
+
+# Source art for the Visuals tab; assets/visuals/ holds the web copies.
+# Leading slash matters: a bare "visuals/" would also swallow assets/visuals/,
+# which the site actually loads.
+/visuals/
+
+# Separate projects that happen to live in this folder. Not part of the site.
+yulu-splash/
+design/
+
+# Local tooling (the preview server). Nothing the published site needs.
+.claude/
