@@ -21,7 +21,6 @@
   --tab-on:         #000000;   /* tab, hover + selected (Figma specs #2d2d2d) */
   --ink-year:       #595959;   /* 7.00:1 — company names, social links */
   --rule:           #dbdbdb;
-  --teal:           #63c8bc;   /* the diamond separators */
 
   --gutter:         300px;  /* header / nav */
   --gutter-work:    284px;  /* work grid — cards add their own 16px, so their
@@ -167,10 +166,6 @@ img { max-width: 100%; display: block; }
   outline: 2px solid var(--tab-on);
   outline-offset: 4px;
 }
-
-/* Inherits the tab's colour via fill="currentColor", so the hand
-   goes black on hover and when selected without extra rules. */
-.nav-emoji { width: 20px; height: 20px; display: block; }
 
 
 /* ---------------------------------------------------------------
@@ -549,16 +544,6 @@ img { max-width: 100%; display: block; }
   object-fit: cover;
 }
 
-/* An 8px square on its corner. */
-.worked-sep {
-  flex: none;
-  width: 8px;
-  height: 8px;
-  background: var(--teal);
-  transform: rotate(45deg);
-}
-
-
 /* ---------------------------------------------------------------
    About — contact
    --------------------------------------------------------------- */
@@ -677,7 +662,9 @@ img { max-width: 100%; display: block; }
      would collapse to the 24px gap. Give the section break back explicitly. */
   .worked { margin-top: 24px; }
   .bio { gap: 48px; }
-  .worked-list, .socials { gap: 16px; }
+  /* The company row keeps its 24px at every width — it reads as one
+     block, and 16px ran the names together once the diamonds went. */
+  .socials { gap: 16px; }
   .chit-chat { margin-top: 56px; padding: 0; }
 }
 
