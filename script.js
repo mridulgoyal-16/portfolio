@@ -185,6 +185,58 @@
 
 
 /* ---------------------------------------------------------------
+   D2 — the alternative desktop treatment, opened with ?d=2.
+
+   All of the look lives in styles.css under .d2. The one thing CSS cannot
+   do is the sizing rule: the card should be as wide as the widest heading,
+   so that the blurb wraps to a second and third line inside it. A grid
+   column left to size itself would instead stretch to the longest blurb and
+   put each on one line, so the width is measured here and handed over.
+   --------------------------------------------------------------- */
+
+(function () {
+  "use strict";
+
+  if (new URLSearchParams(location.search).get("d") !== "2") return;
+  document.body.classList.add("d2");
+
+  var work   = document.querySelector(".work");
+  var titles = Array.prototype.slice.call(document.querySelectorAll(".project-title"));
+  if (!work || !titles.length) return;
+
+  function measure() {
+    // Clear the width first: with it applied the headings may already be
+    // wrapping, and a wrapped heading measures narrower than it wants to be.
+    work.style.removeProperty("--d2-card-w");
+
+    var widest = 0;
+    titles.forEach(function (title) {
+      // A Range around the text, not the element's own box. The heading is a
+      // stretched flex child, so its rectangle is the card's width and tells
+      // us nothing about how much room the words actually want.
+      var range = document.createRange();
+      range.selectNodeContents(title);
+      var width = range.getBoundingClientRect().width;
+      if (width > widest) widest = width;
+    });
+    if (!widest) return;                       // panel hidden; nothing to read
+
+    var link  = titles[0].closest(".project-link");
+    var style = getComputedStyle(link);
+    var frame = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)
+              + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
+
+    work.style.setProperty("--d2-card-w", Math.ceil(widest + frame) + "px");
+  }
+
+  window.addEventListener("resize", measure);
+  document.addEventListener("tabchange", measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  measure();
+})();
+
+
+/* ---------------------------------------------------------------
    Work list on narrow screens.
 
    Two jobs, both only below 1100px:

@@ -25,7 +25,9 @@
   --gutter:         300px;  /* header / nav */
   --gutter-work:    284px;  /* work grid — cards add their own 16px, so their
                                text still lands flush at 300 */
-  --card-radius:    20px;
+  /* Every card shape: the mobile cards, the D2 desktop cards, and D1's
+     travelling pill, which is the same box drawn behind the card. */
+  --card-radius:    8px;
   --panel-w:        676px;
   --panel-ar:       676 / 384;   /* unitless — aspect-ratio rejects lengths */
 
@@ -729,6 +731,90 @@ img { max-width: 100%; display: block; }
   .socials { gap: 16px; }
   .chit-chat { margin-top: 56px; padding: 0; }
 }
+
+/* ---------------------------------------------------------------
+   D2 — an alternative desktop treatment, reached with ?d=2.
+
+   D1 (the default) keeps the list quiet and lets the travelling pill and the
+   pinned thumbnail do the work. D2 turns each row into a card that opens on
+   hover: the blurb unfolds, the client name goes, and the raised treatment
+   moves off the pill and onto the card itself.
+
+   The pill is retired here on purpose. It is positioned from a rectangle
+   measured at pointerenter, and these cards change height the instant they
+   are entered — the highlight would always be sized to the closed card.
+   --------------------------------------------------------------- */
+
+@media (min-width: 1101px) {
+  .d2 .glass { display: none; }
+
+  /* Card width comes from the widest heading — script.js measures it and
+     writes --d2-card-w. That is what makes the blurb wrap at all: left to
+     itself a max-content column would stretch to the longest blurb and put
+     every one of them on a single line. */
+  .d2 .project-link {
+    width: var(--d2-card-w, auto);
+    gap: 0;                            /* the parts carry their own spacing,
+                                          so a closed blurb adds nothing */
+    border: 1px solid transparent;
+    border-radius: var(--card-radius);
+    transition:
+      background   0.25s var(--ease-out),
+      box-shadow   0.25s var(--ease-out),
+      border-color 0.25s var(--ease-out);
+  }
+
+  .d2 .project-org { margin-top: 12px; }
+
+  .d2 .project-link:hover,
+  .d2 .project-link:focus-visible {
+    border-color: var(--glass-edge);
+    background: var(--glass-fill);
+    box-shadow: var(--glass-shadow);
+  }
+
+  /* Asked for explicitly: the client disappears the moment the card opens,
+     rather than fading with the blurb. */
+  .d2 .project-link:hover .project-org,
+  .d2 .project-link:focus-visible .project-org { display: none; }
+
+  /* 0fr → 1fr animates to the content's own height without anyone having to
+     measure it, which max-height cannot do. The inner span is what gets
+     clipped on the way; its padding lives inside the collapsing area so a
+     closed card is exactly title-height. */
+  .d2 .project-desc {
+    display: grid;
+    grid-template-rows: 0fr;
+    /* The gap above the blurb belongs out here, not on the collapsing child:
+       padding is part of that child's box and survives its own overflow
+       clip, so a closed card would still carry 12px of nothing. */
+    padding-top: 0;
+    transition:
+      grid-template-rows 0.28s var(--ease-out),
+      padding-top        0.28s var(--ease-out);
+  }
+
+  .d2 .project-desc > span {
+    display: block;
+    min-height: 0;
+    overflow: hidden;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--ink-muted);
+  }
+
+  .d2 .project-link:hover .project-desc,
+  .d2 .project-link:focus-visible .project-desc {
+    grid-template-rows: 1fr;
+    padding-top: 12px;
+  }
+}
+
+@media (min-width: 1101px) and (prefers-reduced-motion: reduce) {
+  .d2 .project-desc { transition: none; }
+}
+
 
 /* Phone. 48px of gutter is a lot of nothing on a 390px screen, so the page
    pulls in to 24px a side and the cards get the width back. */
