@@ -722,6 +722,12 @@ img { max-width: 100%; display: block; }
   .about { padding-top: 40px; padding-bottom: 96px; }
   .about-intro { grid-template-columns: minmax(0, 1fr); gap: 48px; }
 
+  /* Stacked, the photo is narrower than the column it now has to itself.
+     The 14px of black offset lives inside the box's own padding, so
+     centring the box would leave the white card sitting 7px left; the
+     margin gives that back. */
+  .photo { justify-self: center; margin-right: -14px; }
+
   /* Stacked, there is no photo alongside to leave slack, so the auto margin
      would collapse to the 24px gap. Give the section break back explicitly. */
   .worked { margin-top: 24px; }
@@ -751,6 +757,22 @@ img { max-width: 100%; display: block; }
 
 @media (min-width: 1101px) {
   .d2 .glass { display: none; }
+
+  /* Narrower page margins than D1 — but the extra room is meant to fall
+     between the card and the thumbnail, not into either of them. */
+  .d2 .work {
+    padding-left: 200px;
+    padding-right: 250px;
+  }
+
+  /* So the thumbnail is pinned to the width it had at D1's margins:
+     everything the old layout left over after its own gutters, the 24px
+     gap and the card. Held to the right edge, the slack shows up as gap. */
+  .d2 .preview {
+    width: calc(100vw - var(--gutter-work) - var(--gutter) - 24px - var(--d2-card-w, 310px));
+    max-width: var(--panel-w);
+    justify-self: end;
+  }
 
   /* Card width comes from the widest heading — script.js measures it and
      writes --d2-card-w. That is what makes the blurb wrap at all: left to
