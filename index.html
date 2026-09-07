@@ -11,7 +11,7 @@
      lifetime, so a returning visitor can get new HTML with an old stylesheet
      and see a broken page. Changing the query makes it a new URL and forces a
      refetch. BUMP BOTH NUMBERS whenever you edit styles.css or script.js. -->
-<link rel="stylesheet" href="styles.css?v=49">
+<link rel="stylesheet" href="styles.css?v=52">
 </head>
 <body>
 
@@ -47,6 +47,7 @@
          target="_blank" rel="noopener noreferrer">
         <span class="project-title">Revamping repair flow for Mechanics</span>
         <span class="project-org">Yulu</span>
+        <span class="project-desc">Revamping the user flow to mirror real-world operations, improving in-app efficiency and productivity.</span>
       </a>
     </li>
 
@@ -56,6 +57,7 @@
          target="_blank" rel="noopener noreferrer">
         <span class="project-title">Workbench UX &amp; 3D Icons</span>
         <span class="project-org">Yulu</span>
+        <span class="project-desc">Revamping UI for a Console page and designing consistent icons through ChatGPT.</span>
       </a>
     </li>
 
@@ -65,6 +67,7 @@
          target="_blank" rel="noopener noreferrer">
         <span class="project-title">Banner design and illustrations</span>
         <span class="project-org">PocketFm</span>
+        <span class="project-desc">Created banners and visuals for PocketFM’s new design language; initiated the “Aural Visual Library” for future design use.</span>
       </a>
     </li>
 
@@ -74,6 +77,7 @@
          target="_blank" rel="noopener noreferrer">
         <span class="project-title">Streaks: habit building for daily writing</span>
         <span class="project-org">PocketFm</span>
+        <span class="project-desc">Improved PocketFM UGC’s streak discoverability with cleaner visual hierarchy.</span>
       </a>
     </li>
 
@@ -83,6 +87,7 @@
          target="_blank" rel="noopener noreferrer">
         <span class="project-title">Plastic Recycling on Blinkit</span>
         <span class="project-org project-org--note">Experimental work</span>
+        <span class="project-desc">A brand, UX and UI design case study.</span>
       </a>
     </li>
 
@@ -91,7 +96,9 @@
   <!-- Travelling highlight. Positioned entirely from script.js. -->
   <span class="glass" id="glass" aria-hidden="true"><span class="glass-sheen"></span></span>
 
-  <!-- Pinned preview. One panel per project; only the active one is shown. -->
+  <!-- Pinned preview. One panel per project; only the active one is shown.
+       Below 1100px script.js moves each figure into its own card, so the same
+       five images serve both layouts and none is downloaded twice. -->
   <div class="preview" id="preview" aria-hidden="true">
 
     <figure class="preview-panel" data-preview="workbench">
@@ -212,6 +219,6 @@
 </section>
 </main>
 
-<script src="script.js?v=49"></script>
+<script src="script.js?v=52"></script>
 </body>
 </html>

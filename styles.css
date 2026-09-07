@@ -31,6 +31,18 @@
 
   --ease-spring: cubic-bezier(0.34, 1.30, 0.64, 1);
   --ease-out:    cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* The raised look, shared by the travelling highlight on desktop and the
+     selected card on mobile — one definition so they cannot drift apart. */
+  --glass-edge: #f4f4f6;
+  --glass-fill: linear-gradient(#ffffff 0%, #fafafa 100%);
+  --glass-shadow:
+    #ffffff 0 2px 4px inset,
+    rgba(255, 255, 255, 0.5) 0 -4px 4px inset,
+    #ffffff 0 -4px 16px inset,
+    rgba(111, 111, 117, 0.07) 0 4px 10px inset,
+    rgba(53, 53, 79, 0.4) 0 4px 14px -10px,
+    rgba(53, 53, 79, 0.1) 0 11px 28px -10px;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -294,6 +306,10 @@ img { max-width: 100%; display: block; }
    line; it was asked for explicitly. #767676 is the lightest grey that passes. */
 .project-org--note { color: #777777; }
 
+/* Card blurb. Mobile only — on desktop the pinned thumbnail carries the
+   weight and the list stays a list. */
+.project-desc { display: none; }
+
 
 /* ---------------------------------------------------------------
    Travelling highlight ("liquid glass")
@@ -308,15 +324,9 @@ img { max-width: 100%; display: block; }
   pointer-events: none;
   opacity: 0;
   border-radius: var(--card-radius);
-  border: 1px solid #f4f4f6;
-  background: linear-gradient(#ffffff 0%, #fafafa 100%);
-  box-shadow:
-    #ffffff 0 2px 4px inset,
-    rgba(255, 255, 255, 0.5) 0 -4px 4px inset,
-    #ffffff 0 -4px 16px inset,
-    rgba(111, 111, 117, 0.07) 0 4px 10px inset,
-    rgba(53, 53, 79, 0.4) 0 4px 14px -10px,
-    rgba(53, 53, 79, 0.1) 0 11px 28px -10px;
+  border: 1px solid var(--glass-edge);
+  background: var(--glass-fill);
+  box-shadow: var(--glass-shadow);
   transform-origin: 50% 50%;
   will-change: transform, width, height, opacity;
   transition:
@@ -642,12 +652,64 @@ img { max-width: 100%; display: block; }
   .nav { gap: 36px; }
   .header { padding-top: 64px; padding-bottom: 64px; }
 
-  /* Hover has no meaning here — drop the preview column and the pill. */
+  /* Hover has no meaning on a touch screen, so the pinned preview column and
+     the travelling pill both go. In their place each project becomes a self
+     contained card: thumbnail, title, blurb. script.js moves the very same
+     <figure> out of #preview and into the card, so nothing loads twice. */
   .work { grid-template-columns: minmax(0, 1fr); padding-bottom: 96px; }
   .preview { display: none; }
   .glass { display: none; }
-  .project-link { padding: 16px 0; }
-  .projects { gap: 8px; }
+
+  .projects { gap: 16px; align-items: stretch; }
+  .project { display: block; }
+
+  /* Resting state: outline only. */
+  .project-link {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    background: #ffffff;
+    border: 1px solid var(--border-primary);
+    border-radius: var(--card-radius);
+    transition:
+      box-shadow    0.3s var(--ease-out),
+      border-color  0.3s var(--ease-out),
+      background    0.3s var(--ease-out);
+  }
+
+  /* Selected state: the same raised treatment the pill uses on desktop.
+     script.js gives this to whichever card is nearest the middle of the
+     screen, so scrolling walks the highlight down the list. */
+  .project-link.is-current {
+    border-color: var(--glass-edge);
+    background: var(--glass-fill);
+    box-shadow: var(--glass-shadow);
+  }
+
+  /* The relocated thumbnail. In #preview it is one of five absolutely
+     positioned, cross-fading layers; here it is just a block at the top of
+     the card, sized by the panel's own aspect ratio. */
+  .project-link .preview-panel {
+    position: static;
+    width: 100%;
+    aspect-ratio: var(--panel-ar);
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+    will-change: auto;
+  }
+
+  /* The client belongs to the desktop list; the blurb replaces it here. */
+  .project-org { display: none; }
+
+  .project-desc {
+    display: block;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--ink-muted);
+  }
   .visuals { padding: var(--panel-top) var(--gutter) 96px; }
   /* One column: the wide image has nothing to span, so reset it. */
   .visuals-grid { grid-template-columns: minmax(0, 1fr); column-gap: 0; }
@@ -666,6 +728,12 @@ img { max-width: 100%; display: block; }
      block, and 16px ran the names together once the diamonds went. */
   .socials { gap: 16px; }
   .chit-chat { margin-top: 56px; padding: 0; }
+}
+
+/* Phone. 48px of gutter is a lot of nothing on a 390px screen, so the page
+   pulls in to 24px a side and the cards get the width back. */
+@media (max-width: 768px) {
+  :root { --gutter: 24px; --gutter-work: 24px; }
 }
 
 /* The contact row is only 432px wide side by side (125 blob + 40 gap + the

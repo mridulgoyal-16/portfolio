@@ -185,6 +185,114 @@
 
 
 /* ---------------------------------------------------------------
+   Work list on narrow screens.
+
+   Two jobs, both only below 1100px:
+
+   1. Each project becomes a card with its own thumbnail. Rather than a second
+      copy of every image in the markup — which would download on desktop too,
+      hidden or not — the very same <figure> is moved out of #preview and into
+      its card, and moved back on the way up.
+   2. Hover cannot pick the highlighted card on a touch screen, so scrolling
+      does: whichever card is nearest the middle of the screen is the selected
+      one, and the highlight walks down the list as you go.
+   --------------------------------------------------------------- */
+
+(function () {
+  "use strict";
+
+  var narrow  = window.matchMedia("(max-width: 1100px)");
+  var preview = document.getElementById("preview");
+  var panel   = document.getElementById("panel-work");
+  var links   = Array.prototype.slice.call(document.querySelectorAll(".project-link"));
+  if (!preview || !panel || !links.length) return;
+
+  var figures = {};
+  Array.prototype.forEach.call(preview.querySelectorAll(".preview-panel"), function (fig) {
+    figures[fig.dataset.preview] = fig;
+  });
+
+  var current = null;
+  var queued  = false;
+
+  function place() {
+    links.forEach(function (link) {
+      var fig = figures[link.dataset.preview];
+      if (!fig) return;
+      if (narrow.matches) {
+        // Ahead of the title, and only if it is not already there — moving a
+        // node that is already in place would still restart image decoding.
+        if (fig.parentNode !== link) link.insertBefore(fig, link.firstChild);
+      } else if (fig.parentNode !== preview) {
+        preview.appendChild(fig);
+      }
+    });
+  }
+
+  function clear() {
+    if (!current) return;
+    current.classList.remove("is-current");
+    current = null;
+  }
+
+  function pick() {
+    queued = false;
+
+    // offsetParent is null while the Work panel is hidden, where every
+    // rectangle measures zero and the first card would always win.
+    if (!narrow.matches || !panel.offsetParent) return clear();
+
+    var doc = document.documentElement;
+    var best;
+
+    // At the ends of the page the middle of the screen cannot reach the first
+    // or last card — there is no room left to scroll — so they would never be
+    // selectable. Hand them the highlight outright.
+    if (window.scrollY <= 2) {
+      best = links[0];
+    } else if (window.scrollY + window.innerHeight >= doc.scrollHeight - 2) {
+      best = links[links.length - 1];
+    } else {
+      var middle = window.innerHeight / 2;
+      var bestDistance = Infinity;
+      links.forEach(function (link) {
+        var rect = link.getBoundingClientRect();
+        var distance = Math.abs((rect.top + rect.bottom) / 2 - middle);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          best = link;
+        }
+      });
+    }
+
+    if (best === current) return;
+    if (current) current.classList.remove("is-current");
+    if (best) best.classList.add("is-current");
+    current = best;
+  }
+
+  function onScroll() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(pick);
+  }
+
+  function sync() {
+    place();
+    pick();
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", sync);
+  document.addEventListener("tabchange", sync);
+  if (narrow.addEventListener) narrow.addEventListener("change", sync);
+  else narrow.addListener(sync);          // Safari < 14
+
+  sync();
+})();
+
+
+/* ---------------------------------------------------------------
    Visuals masonry.
 
    CSS grid can span an image across two columns but cannot pack items of
