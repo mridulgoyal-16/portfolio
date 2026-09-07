@@ -759,18 +759,21 @@ img { max-width: 100%; display: block; }
   .d2 .glass { display: none; }
 
   /* Narrower page margins than D1 — but the extra room is meant to fall
-     between the card and the thumbnail, not into either of them. */
-  .d2 .work {
-    padding-left: 200px;
+     between the card and the thumbnail, not into either of them. The
+     header and the tabs move with the work grid, or they would sit 100px
+     inside a card whose border makes the real margin plain to see. */
+  .d2 .work,
+  .d2 .header,
+  .d2 .nav {
+    padding-left: 250px;
     padding-right: 250px;
   }
 
-  /* So the thumbnail is pinned to the width it had at D1's margins:
-     everything the old layout left over after its own gutters, the 24px
-     gap and the card. Held to the right edge, the slack shows up as gap. */
+  /* The thumbnail is given a width of its own rather than taking whatever
+     the column has left, so the card stays put and the slack between the
+     two shows up as gap. min() lets it shrink on a narrower desktop. */
   .d2 .preview {
-    width: calc(100vw - var(--gutter-work) - var(--gutter) - 24px - var(--d2-card-w, 310px));
-    max-width: var(--panel-w);
+    width: min(570px, 100%);
     justify-self: end;
   }
 
