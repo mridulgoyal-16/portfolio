@@ -735,14 +735,18 @@ img { max-width: 100%; display: block; }
 /* ---------------------------------------------------------------
    D2 — an alternative desktop treatment, reached with ?d=2.
 
-   D1 (the default) keeps the list quiet and lets the travelling pill and the
-   pinned thumbnail do the work. D2 turns each row into a card that opens on
-   hover: the blurb unfolds, the client name goes, and the raised treatment
-   moves off the pill and onto the card itself.
+   D1 (the default) keeps the list quiet, naming the client under each
+   project and letting the travelling pill and the pinned thumbnail do the
+   work. D2 gives the blurb that slot instead — the client name goes for
+   good, not on hover — and turns each row into a card. Hover then does two
+   things only: the card lifts, and the thumbnail changes.
 
-   The pill is retired here on purpose. It is positioned from a rectangle
-   measured at pointerenter, and these cards change height the instant they
-   are entered — the highlight would always be sized to the closed card.
+   Because nothing opens or closes, every card keeps its height and the list
+   never shifts under the cursor.
+
+   The pill is retired here: its raised look now belongs to the card itself,
+   and one highlight travelling behind five bordered cards would only fight
+   with them.
    --------------------------------------------------------------- */
 
 @media (min-width: 1101px) {
@@ -754,8 +758,6 @@ img { max-width: 100%; display: block; }
      every one of them on a single line. */
   .d2 .project-link {
     width: var(--d2-card-w, auto);
-    gap: 0;                            /* the parts carry their own spacing,
-                                          so a closed blurb adds nothing */
     border: 1px solid transparent;
     border-radius: var(--card-radius);
     transition:
@@ -764,8 +766,8 @@ img { max-width: 100%; display: block; }
       border-color 0.25s var(--ease-out);
   }
 
-  .d2 .project-org { margin-top: 12px; }
-
+  /* The whole of hover: lift the card. The thumbnail swap is script.js,
+     the same as in D1. */
   .d2 .project-link:hover,
   .d2 .project-link:focus-visible {
     border-color: var(--glass-edge);
@@ -773,46 +775,16 @@ img { max-width: 100%; display: block; }
     box-shadow: var(--glass-shadow);
   }
 
-  /* Asked for explicitly: the client disappears the moment the card opens,
-     rather than fading with the blurb. */
-  .d2 .project-link:hover .project-org,
-  .d2 .project-link:focus-visible .project-org { display: none; }
+  /* The blurb takes the client's place outright. */
+  .d2 .project-org { display: none; }
 
-  /* 0fr → 1fr animates to the content's own height without anyone having to
-     measure it, which max-height cannot do. The inner span is what gets
-     clipped on the way; its padding lives inside the collapsing area so a
-     closed card is exactly title-height. */
   .d2 .project-desc {
-    display: grid;
-    grid-template-rows: 0fr;
-    /* The gap above the blurb belongs out here, not on the collapsing child:
-       padding is part of that child's box and survives its own overflow
-       clip, so a closed card would still carry 12px of nothing. */
-    padding-top: 0;
-    transition:
-      grid-template-rows 0.28s var(--ease-out),
-      padding-top        0.28s var(--ease-out);
-  }
-
-  .d2 .project-desc > span {
     display: block;
-    min-height: 0;
-    overflow: hidden;
     font-size: 16px;
     font-weight: 400;
     line-height: 1.5;
     color: var(--ink-muted);
   }
-
-  .d2 .project-link:hover .project-desc,
-  .d2 .project-link:focus-visible .project-desc {
-    grid-template-rows: 1fr;
-    padding-top: 12px;
-  }
-}
-
-@media (min-width: 1101px) and (prefers-reduced-motion: reduce) {
-  .d2 .project-desc { transition: none; }
 }
 
 
