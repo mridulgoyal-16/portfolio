@@ -739,13 +739,15 @@ img { max-width: 100%; display: block; }
 }
 
 /* ---------------------------------------------------------------
-   D2 — an alternative desktop treatment, reached with ?d=2.
+   D2 — the desktop treatment. index.html puts .d2 on <body>, so this is
+   what the plain URL renders; ?d=1 drops the class and gives back D1, the
+   earlier design, which is kept only for comparison.
 
-   D1 (the default) keeps the list quiet, naming the client under each
-   project and letting the travelling pill and the pinned thumbnail do the
-   work. D2 gives the blurb that slot instead — the client name goes for
-   good, not on hover — and turns each row into a card. Hover then does two
-   things only: the card lifts, and the thumbnail changes.
+   D1 keeps the list quiet, naming the client under each project and letting
+   the travelling pill and the pinned thumbnail do the work. D2 gives the
+   blurb that slot instead — the client name goes for good, not on hover —
+   and turns each row into a card. Hover then does two things only: the card
+   lifts, and the thumbnail changes.
 
    Because nothing opens or closes, every card keeps its height and the list
    never shifts under the cursor.

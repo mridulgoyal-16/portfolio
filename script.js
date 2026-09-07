@@ -185,7 +185,8 @@
 
 
 /* ---------------------------------------------------------------
-   D2 — the alternative desktop treatment, opened with ?d=2.
+   D2 — the desktop treatment. index.html carries the class, so this only
+   takes it off again for ?d=1, which keeps the old design reachable.
 
    All of the look lives in styles.css under .d2. The one thing CSS cannot
    do is the sizing rule: the card should be as wide as the widest heading,
@@ -197,8 +198,10 @@
 (function () {
   "use strict";
 
-  if (new URLSearchParams(location.search).get("d") !== "2") return;
-  document.body.classList.add("d2");
+  if (new URLSearchParams(location.search).get("d") === "1") {
+    document.body.classList.remove("d2");
+    return;
+  }
 
   var work   = document.querySelector(".work");
   var titles = Array.prototype.slice.call(document.querySelectorAll(".project-title"));
