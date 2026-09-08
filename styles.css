@@ -764,11 +764,21 @@ img { max-width: 100%; display: block; }
      between the card and the thumbnail, not into either of them. The
      header and the tabs move with the work grid, or they would sit 100px
      inside a card whose border makes the real margin plain to see. */
-  .d2 .work,
+  .d2 { --d2-gutter: 250px; }
+
   .d2 .header,
   .d2 .nav {
-    padding-left: 250px;
-    padding-right: 250px;
+    padding-left: var(--d2-gutter);
+    padding-right: var(--d2-gutter);
+  }
+
+  /* Pulled left by the card's own frame — 16px of padding plus its 1px
+     border — so it is the card's TEXT that lands on the gutter, in line
+     with the name and the tabs, rather than its border. The border sits
+     17px outside that line, which is the cost of aligning the words. */
+  .d2 .work {
+    padding-left: calc(var(--d2-gutter) - 17px);
+    padding-right: var(--d2-gutter);
   }
 
   /* The thumbnail is given a width of its own rather than taking whatever

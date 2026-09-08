@@ -208,23 +208,31 @@
   if (!work || !titles.length) return;
 
   function measure() {
-    // Clear the width first: with it applied the headings may already be
-    // wrapping, and a wrapped heading measures narrower than it wants to be.
-    work.style.removeProperty("--d2-card-w");
+    var link = titles[0].closest(".project-link");
+
+    /* Every heading is measured through one hidden probe rather than in
+       place. Measuring the real headings is circular: they sit in a card
+       whose width is the thing being decided, so once a title wraps it
+       reports the width of its longest line and the card shrinks to fit
+       that — which wraps it further. The probe is absolutely positioned
+       and nowrap, so nothing can constrain it, and it sits inside a card
+       so it inherits the right font. */
+    var probe = document.createElement("span");
+    probe.className = "project-title";
+    probe.style.cssText = "position:absolute;left:-9999px;top:0;" +
+                          "white-space:nowrap;width:auto;visibility:hidden;";
+    link.appendChild(probe);
 
     var widest = 0;
     titles.forEach(function (title) {
-      // A Range around the text, not the element's own box. The heading is a
-      // stretched flex child, so its rectangle is the card's width and tells
-      // us nothing about how much room the words actually want.
-      var range = document.createRange();
-      range.selectNodeContents(title);
-      var width = range.getBoundingClientRect().width;
+      probe.textContent = title.textContent;
+      var width = probe.getBoundingClientRect().width;
       if (width > widest) widest = width;
     });
+
+    link.removeChild(probe);
     if (!widest) return;                       // panel hidden; nothing to read
 
-    var link  = titles[0].closest(".project-link");
     var style = getComputedStyle(link);
     var frame = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)
               + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
