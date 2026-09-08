@@ -772,12 +772,11 @@ img { max-width: 100%; display: block; }
     padding-right: var(--d2-gutter);
   }
 
-  /* Pulled left by the card's own frame — 16px of padding plus its 1px
-     border — so it is the card's TEXT that lands on the gutter, in line
-     with the name and the tabs, rather than its border. The border sits
-     17px outside that line, which is the cost of aligning the words. */
+  /* The card's border sits on the gutter, in line with the name and the
+     tabs. Only one of the two can be flush: the text is then 17px inside
+     that line, held there by the card's own padding and border. */
   .d2 .work {
-    padding-left: calc(var(--d2-gutter) - 17px);
+    padding-left: var(--d2-gutter);
     padding-right: var(--d2-gutter);
   }
 
