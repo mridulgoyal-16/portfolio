@@ -772,11 +772,13 @@ img { max-width: 100%; display: block; }
     padding-right: var(--d2-gutter);
   }
 
-  /* The card's border sits on the gutter, in line with the name and the
-     tabs. Only one of the two can be flush: the text is then 17px inside
-     that line, held there by the card's own padding and border. */
+  /* Pulled left by the card's own frame — 16px of padding plus its 1px
+     border — so it is the card's TEXT that lands on the gutter, reading in
+     one line with the name and the tabs. The border then hangs 17px outside
+     that line, which is the intended trade: the words are what the eye
+     tracks, and the card is only a shadow behind them. */
   .d2 .work {
-    padding-left: var(--d2-gutter);
+    padding-left: calc(var(--d2-gutter) - 17px);
     padding-right: var(--d2-gutter);
   }
 
@@ -788,12 +790,14 @@ img { max-width: 100%; display: block; }
     justify-self: end;
   }
 
-  /* Card width comes from the widest heading — script.js measures it and
-     writes --d2-card-w. That is what makes the blurb wrap at all: left to
-     itself a max-content column would stretch to the longest blurb and put
-     every one of them on a single line. */
+  /* The card holds a set width — without one a max-content column would
+     stretch to the longest blurb and put every one of them on a single
+     line, and nothing would wrap. 310px is the size the column settled at
+     and is kept deliberately; script.js measures the widest heading and
+     writes --d2-card-w, which only ever widens it, so a longer title than
+     today's can never be cut off. */
   .d2 .project-link {
-    width: var(--d2-card-w, auto);
+    width: max(310px, var(--d2-card-w, 0px));
     border: 1px solid transparent;
     border-radius: var(--card-radius);
     transition:
