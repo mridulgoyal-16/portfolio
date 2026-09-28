@@ -11,12 +11,13 @@
      lifetime, so a returning visitor can get new HTML with an old stylesheet
      and see a broken page. Changing the query makes it a new URL and forces a
      refetch. BUMP BOTH NUMBERS whenever you edit styles.css or script.js. -->
-<link rel="stylesheet" href="styles.css?v=83">
+<link rel="stylesheet" href="styles.css?v=84">
 </head>
-<!-- D2 is the design now, so the class is set here rather than by script.js:
-     added after load it would show a frame of D1 first. ?d=1 takes it off
-     again, which is the rare path and can afford the flash. -->
-<body class="d2">
+<!-- The card design is the site, so its class is set here rather than by
+     script.js: added after load it would show a frame of another design
+     first. ?d=1 and ?d=2 swap it out again — the rare paths, which can
+     afford the flash. -->
+<body class="d3">
 
 <header class="header">
   <span class="avatar">
@@ -220,6 +221,6 @@
 </section>
 </main>
 
-<script src="script.js?v=83"></script>
+<script src="script.js?v=84"></script>
 </body>
 </html>

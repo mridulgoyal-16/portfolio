@@ -190,20 +190,20 @@
 
 
 /* ---------------------------------------------------------------
-   Which desktop direction to draw. index.html ships D2, so the plain URL
-   needs no script at all; the flag only moves away from it.
+   Which desktop direction to draw. index.html ships the card design, so
+   the plain URL needs no script at all; the flag only moves away from it.
 
-     (none)  D2 — a list of headings, thumbnail pinned alongside
-     ?d=1    the original — client names, travelling pill
-     ?d=3    the mobile card treatment, brought up to the desktop
+     (none)  cards — each project's own picture, one per row (.d3)
+     ?d=1    the original — client names, travelling pill (no class)
+     ?d=2    a list of headings, one thumbnail pinned alongside (.d2)
    --------------------------------------------------------------- */
 
 (function () {
   "use strict";
 
   var d = new URLSearchParams(location.search).get("d");
-  if (d === "1") document.body.classList.remove("d2");
-  else if (d === "3") document.body.classList.replace("d2", "d3");
+  if (d === "1") document.body.classList.remove("d3");
+  else if (d === "2") document.body.classList.replace("d3", "d2");
 })();
 
 
