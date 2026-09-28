@@ -767,7 +767,8 @@ img { max-width: 100%; display: block; }
   .d2 { --d2-gutter: 250px; }
 
   .d2 .header,
-  .d2 .nav {
+  .d2 .nav,
+  .d2 .about {
     padding-left: var(--d2-gutter);
     padding-right: var(--d2-gutter);
   }
@@ -806,11 +807,13 @@ img { max-width: 100%; display: block; }
       border-color 0.25s var(--ease-out);
   }
 
-  /* The whole of hover: lift the card. The thumbnail swap is script.js,
-     the same as in D1. */
+  /* The whole of hover: lift the card. No outline is drawn — the shadow and
+     the fill are enough to raise it, and a 1px edge on top of them only
+     hardens something meant to read as soft. The transparent border stays
+     so the geometry does not shift. The thumbnail swap is script.js, the
+     same as in D1. */
   .d2 .project-link:hover,
   .d2 .project-link:focus-visible {
-    border-color: var(--glass-edge);
     background: var(--glass-fill);
     box-shadow: var(--glass-shadow);
   }
@@ -831,6 +834,130 @@ img { max-width: 100%; display: block; }
      hovered card's blurb reads a step closer to the title. */
   .d2 .project-link:hover .project-desc,
   .d2 .project-link:focus-visible .project-desc { color: var(--ink-year); }
+}
+
+
+/* ---------------------------------------------------------------
+   D3 — the mobile card brought up to the desktop, reached with ?d=3.
+
+   Where D2 keeps a list of headings beside one pinned thumbnail, D3 gives
+   every project the card it already has on a phone: its own picture on top,
+   the title and blurb underneath, nothing hidden until hover. Two across,
+   so the width goes into the pictures rather than into one very long row.
+
+   Hover still has something to do — the card lifts and its blurb darkens,
+   the same treatment as D2 — but it no longer reveals anything, because
+   there is nothing left to reveal.
+   --------------------------------------------------------------- */
+
+@media (min-width: 1101px) {
+  .d3 { --d3-gutter: 300px; }
+
+  .d3 .glass,
+  .d3 .preview { display: none; }      /* script.js empties #preview anyway */
+
+  .d3 { --d3-card-frame: 25px; }       /* the card's 24px padding + 1px border */
+
+  .d3 .header,
+  .d3 .nav,
+  .d3 .about {
+    padding-left: var(--d3-gutter);
+    padding-right: var(--d3-gutter);
+  }
+
+  /* Pulled out on both sides by the card's own frame, so that the picture
+     and the text under it land on the gutter rather than the card's box
+     doing so. The box then hangs 25px outside that line — which costs
+     nothing, because with no outline the only thing drawn out there is the
+     hover shadow. */
+  .d3 .work {
+    padding-left: calc(var(--d3-gutter) - var(--d3-card-frame));
+    padding-right: calc(var(--d3-gutter) - var(--d3-card-frame));
+  }
+
+  /* One column, since the pinned thumbnail that took the second one has
+     moved into the cards. */
+  .d3 .work {
+    grid-template-columns: minmax(0, 1fr);
+    padding-bottom: 160px;
+  }
+
+  /* One project per row. Two across fitted more on a screen, but halved the
+     picture — and the picture is the work. */
+  .d3 .projects {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .d3 .project { display: block; }
+
+  .d3 .project-link {
+    display: flex;
+    width: auto;                       /* the grid sizes it, not a measured
+                                          heading as in D2 */
+    gap: 0;                            /* the three parts space themselves —
+                                          picture to title and title to blurb
+                                          are not the same distance */
+    padding: 24px;                     /* the card is much larger here than on
+                                          a phone, and 16px read tight on it */
+    background: #ffffff;
+    /* No outline. The thumbnail already draws its own black edge, and a grey
+       one just outside it read as a second frame around the same picture.
+       The border stays at 1px transparent so hover shifts nothing. */
+    border: 1px solid transparent;
+    border-radius: 12px;               /* not the 8px the smaller cards use —
+                                          a corner has to grow with its box */
+    transition:
+      box-shadow    0.3s var(--ease-out),
+      border-color  0.3s var(--ease-out),
+      background    0.3s var(--ease-out);
+  }
+
+  .d3 .project-link:hover,
+  .d3 .project-link:focus-visible {
+    background: var(--glass-fill);
+    box-shadow: var(--glass-shadow);
+  }
+
+  /* The relocated thumbnail. In #preview it is one of five absolutely
+     positioned, cross-fading layers; here it is a block at the top of the
+     card, sized by the panel's own aspect ratio. */
+  .d3 .project-link .preview-panel {
+    position: static;
+    width: 100%;
+    aspect-ratio: var(--panel-ar);
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+    will-change: auto;
+  }
+
+  .d3 .project-org { display: none; }
+
+  /* Bigger than the 16px the rest of the site sets. The card gives the
+     picture most of its height, and at 16px the words under it read as a
+     caption rather than as the title of the piece. The title sits further
+     from the picture than the blurb sits from the title, so the two lines
+     of text group together and read as one block. */
+  .d3 .project-title {
+    font-size: 18px;
+    margin-top: 16px;
+  }
+
+  .d3 .project-desc {
+    display: block;
+    margin-top: 8px;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--ink-muted);
+    transition: color 0.25s var(--ease-out);
+  }
+
+  .d3 .project-link:hover .project-desc,
+  .d3 .project-link:focus-visible .project-desc { color: var(--ink-year); }
 }
 
 

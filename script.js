@@ -37,8 +37,13 @@
     });
 
     if (updateHash) {
+      // location.search has to be carried through by hand. Writing just
+      // "#visuals" — or the bare pathname for Work — throws the query away,
+      // so clicking any tab silently dropped ?d=3 and the next reload came
+      // back as a different design.
       var name = tab.id.replace(/^tab-/, "");
-      history.replaceState(null, "", name === "work" ? location.pathname : "#" + name);
+      var url  = location.pathname + location.search + (name === "work" ? "" : "#" + name);
+      history.replaceState(null, "", url);
     }
 
     // Leaving Work with a project hovered would strand the highlight.
@@ -185,11 +190,25 @@
 
 
 /* ---------------------------------------------------------------
-   D2 — the desktop treatment. index.html carries the class, so this only
-   takes it off again for ?d=1, which keeps the old design reachable.
+   Which desktop direction to draw. index.html ships D2, so the plain URL
+   needs no script at all; the flag only moves away from it.
 
-   All of the look lives in styles.css under .d2. The one thing CSS cannot
-   do is the sizing rule: the card should be as wide as the widest heading,
+     (none)  D2 — a list of headings, thumbnail pinned alongside
+     ?d=1    the original — client names, travelling pill
+     ?d=3    the mobile card treatment, brought up to the desktop
+   --------------------------------------------------------------- */
+
+(function () {
+  "use strict";
+
+  var d = new URLSearchParams(location.search).get("d");
+  if (d === "1") document.body.classList.remove("d2");
+  else if (d === "3") document.body.classList.replace("d2", "d3");
+})();
+
+
+/* ---------------------------------------------------------------
+   D2's one sizing rule. The card should be as wide as the widest heading,
    so that the blurb wraps to a second and third line inside it. A grid
    column left to size itself would instead stretch to the longest blurb and
    put each on one line, so the width is measured here and handed over.
@@ -198,10 +217,7 @@
 (function () {
   "use strict";
 
-  if (new URLSearchParams(location.search).get("d") === "1") {
-    document.body.classList.remove("d2");
-    return;
-  }
+  if (!document.body.classList.contains("d2")) return;
 
   var work   = document.querySelector(".work");
   var titles = Array.prototype.slice.call(document.querySelectorAll(".project-title"));
@@ -248,17 +264,20 @@
 
 
 /* ---------------------------------------------------------------
-   Work list on narrow screens.
+   Cards.
 
-   Two jobs, both only below 1100px:
+   Two jobs:
 
-   1. Each project becomes a card with its own thumbnail. Rather than a second
-      copy of every image in the markup — which would download on desktop too,
-      hidden or not — the very same <figure> is moved out of #preview and into
-      its card, and moved back on the way up.
+   1. Each project becomes a card with its own thumbnail — below 1100px on
+      any direction, and at every width on D3, which is that same card
+      brought up to the desktop. Rather than a second copy of every image in
+      the markup, which would download whether it was shown or not, the very
+      same <figure> is moved out of #preview and into its card, and moved
+      back when the layout no longer wants it there.
    2. Hover cannot pick the highlighted card on a touch screen, so scrolling
       does: whichever card is nearest the middle of the screen is the selected
-      one, and the highlight walks down the list as you go.
+      one, and the highlight walks down the list as you go. That part is for
+      narrow screens only — on D3 the pointer does the picking.
    --------------------------------------------------------------- */
 
 (function () {
@@ -278,11 +297,16 @@
   var current = null;
   var queued  = false;
 
+  function wantsCards() {
+    return narrow.matches || document.body.classList.contains("d3");
+  }
+
   function place() {
+    var inCards = wantsCards();
     links.forEach(function (link) {
       var fig = figures[link.dataset.preview];
       if (!fig) return;
-      if (narrow.matches) {
+      if (inCards) {
         // Ahead of the title, and only if it is not already there — moving a
         // node that is already in place would still restart image decoding.
         if (fig.parentNode !== link) link.insertBefore(fig, link.firstChild);
