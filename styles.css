@@ -891,10 +891,12 @@ img { max-width: 100%; display: block; }
   .d3 .projects {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    /* The card's own 24px padding sits inside this, so the visible space
-       between one card's blurb and the next card's picture is larger than
-       the number suggests. */
-    gap: 48px;
+    /* 6px, not the 56px you see. The visible space is this gap plus what
+       the two cards contribute themselves: 24px of padding and 1px of
+       (transparent) border at each facing edge. 24+1+6+1+24 = 56 from the
+       bottom of one blurb to the top of the next picture. Change the card
+       padding and this number has to move with it. */
+    gap: 6px;
   }
 
   .d3 .project { display: block; }
@@ -963,20 +965,18 @@ img { max-width: 100%; display: block; }
 
   .d3 .project-org { display: none; }
 
-  /* 14px — a step below the 16px the rest of the site runs at, so the two
-     lines sit quietly under the picture. The title sits further from the
-     picture than the blurb sits from the title, so the two lines of text
-     group together and read as one block. */
+  /* 16px, the size the rest of the site runs at — the title inherits it.
+     The title sits further from the picture than the blurb sits from the
+     title, so the two lines of text group together and read as one block. */
   .d3 .project-title {
     margin-top: 16px;
-    font-size: 14px;
     transition: color 0.25s var(--ease-out);
   }
 
   .d3 .project-desc {
     display: block;
     margin-top: 8px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 400;
     line-height: 1.5;
     color: var(--ink-muted);
