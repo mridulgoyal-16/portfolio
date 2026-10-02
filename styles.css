@@ -931,8 +931,14 @@ img { max-width: 100%; display: block; }
   .d3 .project-arrow {
     display: block;
     flex: none;
-    width: 24px;
-    height: 24px;
+    /* Exactly the heading's line box — 22.4px at 16px/1.4 — so the arrow
+       stands as tall as the word it follows and no taller. 1lh says that
+       outright; the em pair above is the same number for browsers without
+       the unit, and only drifts if the line-height stops being 1.4. */
+    width: 1.4em;
+    height: 1.4em;
+    width: 1lh;
+    height: 1lh;
     opacity: 0;
     /* It slides in from down-left along its own diagonal, so it reads as
        arriving rather than appearing. Space is reserved whether or not it
@@ -983,17 +989,20 @@ img { max-width: 100%; display: block; }
     transition: color 0.25s var(--ease-out);
   }
 
-  /* Hover steps both lines one rung UP the grey ladder — #323232 → #595959
-     → #757575 → #8f8f8f — so the words recede as the arrow arrives and the
-     card reads as a thing being pointed at rather than pressed.
-     #8f8f8f measures 3.23:1 on white, under the 4.5:1 AA line, so it is
-     deliberately hover-only: the resting state stays at #757575 (4.61:1),
-     and a keyboard focus-visible card keeps its outline regardless. */
+  /* Hover steps both lines two rungs UP the grey ladder — #323232 → #595959
+     → #757575 → #8f8f8f → #a7a7a7 — so the words recede as the arrow
+     arrives and the card reads as a thing being pointed at rather than
+     pressed. The heading lands where the blurb rests, and the blurb goes a
+     rung further, so the two keep their distance from each other.
+     The heading's #757575 still clears AA at 4.61:1. The blurb's #a7a7a7
+     does not — 2.41:1 — so it is deliberately hover-only: at rest the blurb
+     sits at #757575, and a keyboard focus-visible card keeps its outline
+     regardless of colour. */
   .d3 .project-link:hover .project-title,
-  .d3 .project-link:focus-visible .project-title { color: var(--ink-year); }
+  .d3 .project-link:focus-visible .project-title { color: var(--ink-muted); }
 
   .d3 .project-link:hover .project-desc,
-  .d3 .project-link:focus-visible .project-desc { color: #8f8f8f; }
+  .d3 .project-link:focus-visible .project-desc { color: #a7a7a7; }
 }
 
 
