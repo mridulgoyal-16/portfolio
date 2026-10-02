@@ -170,10 +170,11 @@ img { max-width: 100%; display: block; }
 /* hover */
 .nav-item:hover { color: var(--tab-on); }
 
-/* selected */
+/* selected — the underline takes the text's own colour rather than the
+   quiet grey rule, so the mark reads as part of the word above it. */
 .nav-item[aria-selected="true"] {
   color: var(--tab-on);
-  border-bottom-color: var(--rule);
+  border-bottom-color: currentColor;
 }
 
 .nav-item:focus-visible {
@@ -981,6 +982,59 @@ img { max-width: 100%; display: block; }
 
   .d3 .project-link:hover .project-desc,
   .d3 .project-link:focus-visible .project-desc { color: var(--ink-year); }
+}
+
+
+/* ---------------------------------------------------------------
+   About, desktop only: the photo takes the height of the paragraphs.
+
+   "Worked with" used to sit inside the same column as the text, so a photo
+   stretched to that column matched the whole lot. It is now a row of its
+   own, which leaves the photo's row as the two paragraphs and nothing else.
+
+   Both of the photo's layers — the window and the black card behind it —
+   are absolutely positioned, so the card has no height of its own to argue
+   with and simply becomes whatever that row is. Its width stays fixed, or
+   the two would chase each other: a narrower photo widens the text column,
+   which shortens the paragraphs, which shortens the photo.
+   --------------------------------------------------------------- */
+
+@media (min-width: 1101px) {
+  .about-intro { row-gap: 32px; }
+
+  .photo {
+    align-self: stretch;
+    width: 240px;                    /* was 308 */
+  }
+
+  .photo-window {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 14px;                     /* clears the black card's offset */
+    bottom: 14px;
+    aspect-ratio: auto;              /* the row decides the height now */
+  }
+
+  /* The crop has to be re-aimed for the new window. The shot is a wide room
+     and the subject a small part of it on the right, so the image is blown
+     up and offset rather than object-fit'd — cover on a near-square window
+     would barely crop at all and show the whole room. 263% of a 208px window
+     puts ~550 source pixels across it, which is head to knees; the offsets
+     bring that part into view. top is in px because the window's height
+     moves with the paragraphs and a percentage would drag the framing with
+     it. The window's own scaleX(-1) mirrors the result, as before. */
+  .photo-window img {
+    width: 263.5%;
+    left: -126.6%;
+    top: -320px;
+  }
+
+  .worked {
+    grid-column: 2;
+    margin-top: 0;                   /* the auto margin had a column to fill;
+                                        this row ends where its content does */
+  }
 }
 
 
