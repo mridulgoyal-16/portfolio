@@ -891,7 +891,10 @@ img { max-width: 100%; display: block; }
   .d3 .projects {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
+    /* The card's own 24px padding sits inside this, so the visible space
+       between one card's blurb and the next card's picture is larger than
+       the number suggests. */
+    gap: 48px;
   }
 
   .d3 .project { display: block; }
@@ -920,7 +923,7 @@ img { max-width: 100%; display: block; }
   .d3 .project-title {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 8px;
   }
 
   .d3 .project-arrow {
@@ -960,28 +963,37 @@ img { max-width: 100%; display: block; }
 
   .d3 .project-org { display: none; }
 
-  /* Bigger than the 16px the rest of the site sets. The card gives the
-     picture most of its height, and at 16px the words under it read as a
-     caption rather than as the title of the piece. The title sits further
-     from the picture than the blurb sits from the title, so the two lines
-     of text group together and read as one block. */
+  /* 14px — a step below the 16px the rest of the site runs at, so the two
+     lines sit quietly under the picture. The title sits further from the
+     picture than the blurb sits from the title, so the two lines of text
+     group together and read as one block. */
   .d3 .project-title {
-    font-size: 18px;
     margin-top: 16px;
+    font-size: 14px;
+    transition: color 0.25s var(--ease-out);
   }
 
   .d3 .project-desc {
     display: block;
     margin-top: 8px;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 1.5;
     color: var(--ink-muted);
     transition: color 0.25s var(--ease-out);
   }
 
+  /* Hover steps both lines one rung UP the grey ladder — #323232 → #595959
+     → #757575 → #8f8f8f — so the words recede as the arrow arrives and the
+     card reads as a thing being pointed at rather than pressed.
+     #8f8f8f measures 3.23:1 on white, under the 4.5:1 AA line, so it is
+     deliberately hover-only: the resting state stays at #757575 (4.61:1),
+     and a keyboard focus-visible card keeps its outline regardless. */
+  .d3 .project-link:hover .project-title,
+  .d3 .project-link:focus-visible .project-title { color: var(--ink-year); }
+
   .d3 .project-link:hover .project-desc,
-  .d3 .project-link:focus-visible .project-desc { color: var(--ink-year); }
+  .d3 .project-link:focus-visible .project-desc { color: #8f8f8f; }
 }
 
 
