@@ -312,6 +312,9 @@ img { max-width: 100%; display: block; }
    weight and the list stays a list. */
 .project-desc { display: none; }
 
+/* Shown only by the card design, on hover. */
+.project-arrow { display: none; }
+
 
 /* ---------------------------------------------------------------
    Travelling highlight ("liquid glass")
@@ -851,7 +854,7 @@ img { max-width: 100%; display: block; }
    --------------------------------------------------------------- */
 
 @media (min-width: 1101px) {
-  .d3 { --d3-gutter: 300px; }
+  .d3 { --d3-gutter: 400px; }
 
   .d3 .glass,
   .d3 .preview { display: none; }      /* script.js empties #preview anyway */
@@ -908,16 +911,36 @@ img { max-width: 100%; display: block; }
     border: 1px solid transparent;
     border-radius: 12px;               /* not the 8px the smaller cards use —
                                           a corner has to grow with its box */
-    transition:
-      box-shadow    0.3s var(--ease-out),
-      border-color  0.3s var(--ease-out),
-      background    0.3s var(--ease-out);
   }
 
-  .d3 .project-link:hover,
-  .d3 .project-link:focus-visible {
-    background: var(--glass-fill);
-    box-shadow: var(--glass-shadow);
+  /* Hover does not lift the card. An arrow arrives beside the title
+     instead — the picture is already the loudest thing here, and raising
+     the whole card on top of it said nothing the arrow does not. */
+  .d3 .project-title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .d3 .project-arrow {
+    display: block;
+    flex: none;
+    width: 24px;
+    height: 24px;
+    opacity: 0;
+    /* It slides in from down-left along its own diagonal, so it reads as
+       arriving rather than appearing. Space is reserved whether or not it
+       is shown, so the title never moves. */
+    transform: translate(-4px, 4px);
+    transition:
+      opacity   0.2s var(--ease-out),
+      transform 0.32s var(--ease-spring);
+  }
+
+  .d3 .project-link:hover .project-arrow,
+  .d3 .project-link:focus-visible .project-arrow {
+    opacity: 1;
+    transform: none;
   }
 
   /* The relocated thumbnail. In #preview it is one of five absolutely
