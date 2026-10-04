@@ -521,15 +521,20 @@ img { max-width: 100%; display: block; }
    between the paragraphs, which space-between would do. When the text is tall
    enough to fill the column the auto margin resolves to 0 and .bio's own 24px
    gap still holds the two apart. */
-.worked { display: flex; flex-direction: column; gap: 24px; margin-top: auto; }
+.worked { display: flex; flex-direction: column; gap: 16px; margin-top: auto; }
 
-/* Scoped to .bio to outrank `.bio p`, which would otherwise paint this black. */
-.bio .worked-label {
+/* Was scoped to .bio to outrank `.bio p`. The block has since moved out of
+   .bio, so the scoped selector stopped matching entirely and the label fell
+   back to the body's ink and weight — and kept the <p>'s default 16px margin,
+   which added to the flex gap above. Unscoped, with those fallback values
+   written down deliberately; .chit-chat-label is kept identical to it. */
+.worked-label,
+.chit-chat-label {
   margin: 0;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.5;
-  color: var(--ink-muted);
+  color: var(--ink);
 }
 
 .worked-list,
@@ -601,12 +606,6 @@ img { max-width: 100%; display: block; }
   gap: 32px;
 }
 
-.chit-chat-label {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--ink-muted);
-}
 
 .email {
   display: inline-flex;
@@ -635,25 +634,30 @@ img { max-width: 100%; display: block; }
 .socials a {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 16px;
-  font-weight: 500;
   color: var(--ink-year);
   text-decoration: none;
   transition: color 0.2s var(--ease-out);
 }
 
-/* The underline belongs to the word, not the icon: on the <a> itself it
-   would strike through the glyph as well. */
+/* The glyph carries the link, but the name stays in the document so the link
+   still has something to announce. Clipped rather than display:none, which
+   would take it out of the accessibility tree along with the pixels. */
 .socials a span {
-  text-decoration: underline;
-  text-underline-position: from-font;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 .social-icon {
   flex: none;
-  width: 32px;
-  height: 32px;
+  width: 20px;
+  height: 20px;
   display: block;
 }
 
@@ -888,6 +892,13 @@ img { max-width: 100%; display: block; }
     padding-right: var(--d3-gutter);
   }
 
+  /* About alone starts further left, so its text column has room and the
+     photo beside it is not stretched to a long thin rectangle. 320 is as far
+     as it is worth going: below that the two logo rows, not the paragraphs,
+     decide the photo's height, so the picture stops shrinking while the
+     section drifts further out of line with the nav above it. */
+  .d3 .about { padding-left: 320px; }
+
   /* Pulled out on both sides by the card's own frame, so that the picture
      and the text under it land on the gutter rather than the card's box
      doing so. The box then hangs 25px outside that line — which costs
@@ -1062,19 +1073,20 @@ img { max-width: 100%; display: block; }
   /* Re-aimed for the full-height window. The shot is a wide room and the
      subject a small part of it on the right, so the image is blown up and
      offset rather than object-fit'd — cover would barely crop and show the
-     whole room. These values put source x 609–1161, y 790–1930 across the
-     208x430 opening — the padding box, which is what the percentages resolve
+     whole room. These values put source x 547–1227, y 810–1840 across the
+     208x315 opening — the padding box, which is what the percentages resolve
      against and what overflow clips to, the 9px white border being outside
      both. That is the whole seated figure, head to shoes, with the chair and
-     a little floor. The earlier head-to-knees slice was framed for a 266px
-     window and ran off the bottom of the file at this height.
+     a little floor. Re-aim all three numbers whenever the opening changes
+     shape: a slice cut for a taller window shows the wrong part of the room,
+     or runs off the bottom of the file.
      top is in px because the window's height moves with the content beside
      it and a percentage would drag the framing with it. The window's own
      scaleX(-1) mirrors the result, as before. */
   .photo-window img {
-    width: 263.9%;
-    left: -110.4%;
-    top: -298px;
+    width: 214.0%;
+    left: -80.4%;
+    top: -248px;
   }
 
   .worked {
