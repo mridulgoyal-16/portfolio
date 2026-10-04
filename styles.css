@@ -1080,20 +1080,21 @@ img { max-width: 100%; display: block; }
   /* Re-aimed for the full-height window. The shot is a wide room and the
      subject a small part of it on the right, so the image is blown up and
      offset rather than object-fit'd — cover would barely crop and show the
-     whole room. These values put source x 547–1227, y 810–1840 across the
+     whole room. These values put source x 719–1201, y 775–1505 across the
      208x315 opening — the padding box, which is what the percentages resolve
      against and what overflow clips to, the 9px white border being outside
-     both. That is the whole seated figure, head to shoes, with the chair and
-     a little floor. Re-aim all three numbers whenever the opening changes
-     shape: a slice cut for a taller window shows the wrong part of the room,
-     or runs off the bottom of the file.
+     both. That frames her head to her knees with the chair either side,
+     rather than the whole figure down to the shoes: at this size the full
+     figure left her too small to read. Re-aim all three numbers whenever the
+     opening changes shape — a slice cut for a taller window shows the wrong
+     part of the room, or runs off the bottom of the file.
      top is in px because the window's height moves with the content beside
      it and a percentage would drag the framing with it. The window's own
      scaleX(-1) mirrors the result, as before. */
   .photo-window img {
-    width: 214.0%;
-    left: -80.4%;
-    top: -248px;
+    width: 301.9%;
+    left: -149.2%;
+    top: -334px;
   }
 
   .worked {
