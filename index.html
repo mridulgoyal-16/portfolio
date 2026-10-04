@@ -11,7 +11,7 @@
      lifetime, so a returning visitor can get new HTML with an old stylesheet
      and see a broken page. Changing the query makes it a new URL and forces a
      refetch. BUMP BOTH NUMBERS whenever you edit styles.css or script.js. -->
-<link rel="stylesheet" href="styles.css?v=97">
+<link rel="stylesheet" href="styles.css?v=98">
 </head>
 <!-- The card design is the site, so its class is set here rather than by
      script.js: added after load it would show a frame of another design
@@ -105,27 +105,28 @@
        five images serve both layouts and none is downloaded twice. -->
   <div class="preview" id="preview" aria-hidden="true">
 
+    <!-- ?v= for the same reason as the stylesheet: each file was replaced at
+         the path it already had, and without a new URL a returning visitor
+         keeps the old thumbnail out of cache. Bump the number on any image
+         that gets re-exported. -->
     <figure class="preview-panel" data-preview="workbench">
-      <img src="assets/case/cs01.jpg" alt="" width="676" height="384" decoding="async">
+      <img src="assets/case/cs01.jpg?v=2" alt="" width="676" height="384" decoding="async">
     </figure>
 
     <figure class="preview-panel" data-preview="mechanics">
-      <img src="assets/case/cs02.jpg" alt="" width="676" height="384" loading="eager" decoding="async">
+      <img src="assets/case/cs02.jpg?v=2" alt="" width="676" height="384" loading="eager" decoding="async">
     </figure>
 
     <figure class="preview-panel" data-preview="banners">
-      <img src="assets/case/cs03.jpg" alt="" width="676" height="384" decoding="async">
+      <img src="assets/case/cs03.jpg?v=2" alt="" width="676" height="384" decoding="async">
     </figure>
 
     <figure class="preview-panel" data-preview="streaks">
-      <!-- ?v= for the same reason as the stylesheet: the file was replaced at
-           the same path, and without a new URL a returning visitor keeps the
-           old thumbnail out of cache. Bump it if this image changes again. -->
-      <img src="assets/case/cs04.jpg?v=2" alt="" width="676" height="384" decoding="async">
+      <img src="assets/case/cs04.jpg?v=3" alt="" width="676" height="384" decoding="async">
     </figure>
 
     <figure class="preview-panel" data-preview="blinkit">
-      <img src="assets/case/cs05.jpg" alt="" width="676" height="384" decoding="async">
+      <img src="assets/case/cs05.jpg?v=2" alt="" width="676" height="384" decoding="async">
     </figure>
   </div>
 </section>
@@ -224,6 +225,6 @@
 </section>
 </main>
 
-<script src="script.js?v=97"></script>
+<script src="script.js?v=98"></script>
 </body>
 </html>
