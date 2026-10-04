@@ -11,7 +11,7 @@
      lifetime, so a returning visitor can get new HTML with an old stylesheet
      and see a broken page. Changing the query makes it a new URL and forces a
      refetch. BUMP BOTH NUMBERS whenever you edit styles.css or script.js. -->
-<link rel="stylesheet" href="styles.css?v=95">
+<link rel="stylesheet" href="styles.css?v=97">
 </head>
 <!-- The card design is the site, so its class is set here rather than by
      script.js: added after load it would show a frame of another design
@@ -118,7 +118,10 @@
     </figure>
 
     <figure class="preview-panel" data-preview="streaks">
-      <img src="assets/case/cs04.jpg" alt="" width="676" height="384" decoding="async">
+      <!-- ?v= for the same reason as the stylesheet: the file was replaced at
+           the same path, and without a new URL a returning visitor keeps the
+           old thumbnail out of cache. Bump it if this image changes again. -->
+      <img src="assets/case/cs04.jpg?v=2" alt="" width="676" height="384" decoding="async">
     </figure>
 
     <figure class="preview-panel" data-preview="blinkit">
@@ -221,6 +224,6 @@
 </section>
 </main>
 
-<script src="script.js?v=95"></script>
+<script src="script.js?v=97"></script>
 </body>
 </html>

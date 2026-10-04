@@ -5,6 +5,7 @@
 # under assets/ — these are the originals and are much larger, so keep them
 # local rather than in the repo.
 Case stuy assets/
+case study assets_new/
 assets/company logos/
 
 # Source art for the Visuals tab; assets/visuals/ holds the web copies.
