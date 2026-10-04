@@ -629,16 +629,32 @@ img { max-width: 100%; display: block; }
 
 .email:hover .arrow { transform: translate(3px, -3px); }
 
-/* The address and the socials are one block, tighter than the 32px above. */
-.socials { margin-top: -16px; }
+/* Label, address and socials sit on one even rhythm — the 32px column gap
+   with nothing pulling the last row tighter than the one above it. */
 
 .socials a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-size: 16px;
   font-weight: 500;
   color: var(--ink-year);
+  text-decoration: none;
+  transition: color 0.2s var(--ease-out);
+}
+
+/* The underline belongs to the word, not the icon: on the <a> itself it
+   would strike through the glyph as well. */
+.socials a span {
   text-decoration: underline;
   text-underline-position: from-font;
-  transition: color 0.2s var(--ease-out);
+}
+
+.social-icon {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  display: block;
 }
 
 .socials a:hover { color: var(--tab-on); }
@@ -1010,15 +1026,17 @@ img { max-width: 100%; display: block; }
 
 
 /* ---------------------------------------------------------------
-   About, desktop only: the photo takes the height of the paragraphs.
+   About, desktop only: the photo runs the full height of the section.
 
-   "Worked with" used to sit inside the same column as the text, so a photo
-   stretched to that column matched the whole lot. It is now a row of its
-   own, which leaves the photo's row as the two paragraphs and nothing else.
+   "Worked with" is a row of its own rather than part of the text column, so
+   the photo has to be told to cross both rows — otherwise it stops at the
+   paragraphs. "span 2" rather than "1 / -1": the rows here are implicit, and
+   -1 counts to the end of the EXPLICIT grid, which is one row, so it changes
+   nothing. The photo ends level with the bottom of the logos.
 
    Both of the photo's layers — the window and the black card behind it —
    are absolutely positioned, so the card has no height of its own to argue
-   with and simply becomes whatever that row is. Its width stays fixed, or
+   with and simply becomes whatever those rows are. Its width stays fixed, or
    the two would chase each other: a narrower photo widens the text column,
    which shortens the paragraphs, which shortens the photo.
    --------------------------------------------------------------- */
@@ -1027,6 +1045,7 @@ img { max-width: 100%; display: block; }
   .about-intro { row-gap: 32px; }
 
   .photo {
+    grid-row: 1 / span 2;            /* paragraphs through to the logos */
     align-self: stretch;
     width: 240px;                    /* was 308 */
   }
@@ -1040,18 +1059,22 @@ img { max-width: 100%; display: block; }
     aspect-ratio: auto;              /* the row decides the height now */
   }
 
-  /* The crop has to be re-aimed for the new window. The shot is a wide room
-     and the subject a small part of it on the right, so the image is blown
-     up and offset rather than object-fit'd — cover on a near-square window
-     would barely crop at all and show the whole room. 263% of a 208px window
-     puts ~550 source pixels across it, which is head to knees; the offsets
-     bring that part into view. top is in px because the window's height
-     moves with the paragraphs and a percentage would drag the framing with
-     it. The window's own scaleX(-1) mirrors the result, as before. */
+  /* Re-aimed for the full-height window. The shot is a wide room and the
+     subject a small part of it on the right, so the image is blown up and
+     offset rather than object-fit'd — cover would barely crop and show the
+     whole room. These values put source x 609–1161, y 790–1930 across the
+     208x430 opening — the padding box, which is what the percentages resolve
+     against and what overflow clips to, the 9px white border being outside
+     both. That is the whole seated figure, head to shoes, with the chair and
+     a little floor. The earlier head-to-knees slice was framed for a 266px
+     window and ran off the bottom of the file at this height.
+     top is in px because the window's height moves with the content beside
+     it and a percentage would drag the framing with it. The window's own
+     scaleX(-1) mirrors the result, as before. */
   .photo-window img {
-    width: 263.5%;
-    left: -126.6%;
-    top: -320px;
+    width: 263.9%;
+    left: -110.4%;
+    top: -298px;
   }
 
   .worked {
