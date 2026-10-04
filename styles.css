@@ -580,22 +580,24 @@ img { max-width: 100%; display: block; }
   padding: 64px 0;
 }
 
-/* Sized to the block beside it — "Let's chit-chat." down to the socials row:
-     22.4  label     (16px x 1.4)
+/* The mascot stands exactly as tall as the block beside it — "Let's
+   chit-chat." down to the icons:
+     24    label     (16px x 1.5)
    + 32    gap
    + 32    email     (the 24px arrow icon sets this, plus 8px of padding)
-   + 16    gap       (the 32px gap, less the socials' -16px pull)
-   + 22.4  socials   (16px x 1.4)
-   = 125
-   Flexbox can't derive this on its own: an <img> contributes its intrinsic
-   size to the row height, so stretching it would just measure itself. Re-run
-   the sum if the type scale changes. */
-/* blue05 is 720x768, not square like blue04 was. Height stays auto so the
-   mascot keeps its proportions; the width attribute on the img reserves the
-   right box before it loads. */
+   + 32    gap
+   + 25    socials   (the 20px icons' line box)
+   = 145
+   The width is what gets set, because blue05 is 720x768 and the height
+   follows from that: 136 x 768/720 = 145. Flexbox cannot derive this on its
+   own — an <img> contributes its intrinsic size to the row, so stretching it
+   only measures itself, and an out-of-flow 100% resolves against the row's
+   padding box rather than its content. So the sum is done by hand: re-run it
+   if the type scale, the gaps or the icon size change. It has gone stale
+   before — the old 125px still assumed socials set in text. */
 .chit-chat-blob {
   flex: none;
-  width: 125px;
+  width: 136px;
   height: auto;
 }
 
@@ -892,12 +894,16 @@ img { max-width: 100%; display: block; }
     padding-right: var(--d3-gutter);
   }
 
-  /* About alone starts further left, so its text column has room and the
-     photo beside it is not stretched to a long thin rectangle. 320 is as far
-     as it is worth going: below that the two logo rows, not the paragraphs,
-     decide the photo's height, so the picture stops shrinking while the
-     section drifts further out of line with the nav above it. */
-  .d3 .about { padding-left: 320px; }
+  /* The text column needs room so the photo beside it is not stretched into
+     a long thin rectangle — but the room comes off the RIGHT, not the left.
+     Taking it off the left moved the photo's edge out of line with the Work
+     tab above it, which is the one edge on this page you can actually see.
+     Ragged-right text has no such edge to break, so the section can end
+     short of the gutter without anything looking wrong.
+     80px is as far as it is worth going: past that the two logo rows, not
+     the paragraphs, decide the photo's height, so the picture stops
+     shrinking and only the right margin keeps moving. */
+  .d3 .about { padding-right: calc(var(--d3-gutter) - 80px); }
 
   /* Pulled out on both sides by the card's own frame, so that the picture
      and the text under it land on the gutter rather than the card's box
