@@ -450,8 +450,6 @@ img { max-width: 100%; display: block; }
   gap: 72px;
 }
 
-/* The frame stacks two same-sized cards: a solid black one nudged down and
-   right, and the white photo card on top of it. */
 /* Fixed portrait rectangle. align-self:start opts out of the grid's stretch,
    so the aspect-ratio below — not the row — decides the height. The bio is
    what stretches now. */
@@ -460,15 +458,6 @@ img { max-width: 100%; display: block; }
   align-self: start;
   flex: none;
   width: 308px;
-  padding: 0 14px 14px 0;          /* room for the black card to show through */
-}
-
-.photo::after {
-  content: "";
-  position: absolute;
-  inset: 14px 0 0 14px;
-  border-radius: 7px;
-  background: #000000;
 }
 
 /* The frame mirrors the shot. The flip has to sit on the window, not the
@@ -752,11 +741,8 @@ img { max-width: 100%; display: block; }
   .about { padding-top: 40px; padding-bottom: 96px; }
   .about-intro { grid-template-columns: minmax(0, 1fr); gap: 48px; }
 
-  /* Stacked, the photo is narrower than the column it now has to itself.
-     The 14px of black offset lives inside the box's own padding, so
-     centring the box would leave the white card sitting 7px left; the
-     margin gives that back. */
-  .photo { justify-self: center; margin-right: -14px; }
+  /* Stacked, the photo is narrower than the column it now has to itself. */
+  .photo { justify-self: center; }
 
   /* Stacked, there is no photo alongside to leave slack, so the auto margin
      would collapse to the 24px gap. Give the section break back explicitly. */
@@ -1070,18 +1056,15 @@ img { max-width: 100%; display: block; }
 
   .photo-window {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 14px;                     /* clears the black card's offset */
-    bottom: 14px;
+    inset: 0;
     aspect-ratio: auto;              /* the row decides the height now */
   }
 
   /* Re-aimed for the full-height window. The shot is a wide room and the
      subject a small part of it on the right, so the image is blown up and
      offset rather than object-fit'd — cover would barely crop and show the
-     whole room. These values put source x 719–1201, y 775–1505 across the
-     208x315 opening — the padding box, which is what the percentages resolve
+     whole room. These values put source x 714–1206, y 775–1505 across the
+     222x329 opening — the padding box, which is what the percentages resolve
      against and what overflow clips to, the 9px white border being outside
      both. That frames her head to her knees with the chair either side,
      rather than the whole figure down to the shoes: at this size the full
@@ -1092,9 +1075,9 @@ img { max-width: 100%; display: block; }
      it and a percentage would drag the framing with it. The window's own
      scaleX(-1) mirrors the result, as before. */
   .photo-window img {
-    width: 301.9%;
-    left: -149.2%;
-    top: -334px;
+    width: 295.4%;
+    left: -144.9%;
+    top: -349px;
   }
 
   .worked {
