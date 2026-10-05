@@ -412,13 +412,29 @@ img { max-width: 100%; display: block; }
 
 /* The same hairline the mobile cards use, so a thumbnail whose own edges are
    near-white still has a shape against the white card. Black held the edge
-   too hard — it read as a frame around the picture rather than its boundary. */
+   too hard — it read as a frame around the picture rather than its boundary.
+
+   Two details here exist to stop white showing between the picture and that
+   hairline, which is what kept appearing:
+
+   cover, not contain. The box's shape is never exactly the file's — the
+   panel's ratio, a 1px border and sub-pixel layout all nudge it — and
+   contain answers any mismatch with white bars down the long sides. cover
+   fills the box instead and trims the difference, which is well under a
+   pixel at these sizes.
+
+   outline, not border. A border sits INSIDE the box, so the picture is
+   clipped to a corner 1px tighter than the one the border draws, and the
+   card's white shows through the gap along the curve. An outline pulled in
+   by its own width paints over the picture at the box's own edge, with no
+   second radius to disagree with. */
 .preview-panel img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  border: 1px solid var(--border-primary);
+  object-fit: cover;
   border-radius: 12px;
+  outline: 1px solid var(--border-primary);
+  outline-offset: -1px;
 }
 
 .preview-soon {
@@ -873,8 +889,10 @@ img { max-width: 100%; display: block; }
   .d3 .preview { display: none; }      /* script.js empties #preview anyway */
 
   .d3 {
-    --d3-card-pad: 24px;
-    --d3-card-frame: 25px;             /* the card's padding + its 1px border */
+    --d3-card-pad: 24px;               /* vertical only — see .project-link */
+    --d3-card-frame: 1px;              /* the card's border, and nothing else:
+                                          with no horizontal padding its edge
+                                          is already the content's edge */
   }
 
   .d3 .header,
@@ -895,24 +913,13 @@ img { max-width: 100%; display: block; }
      shrinking and only the right margin keeps moving. */
   .d3 .about { padding-right: calc(var(--d3-gutter) - 80px); }
 
-  /* Pulled out on both sides by the card's own frame, so that the picture
-     and the text under it land on the gutter rather than the card's box
-     doing so. The box then hangs 25px outside that line — which costs
-     nothing, because with no outline the only thing drawn out there is the
-     hover shadow. */
+  /* Pulled out on both sides by the card's own frame — now just its 1px
+     border — so that the picture and the text under it land on the gutter
+     rather than the card's box doing so. The box hangs that 1px outside the
+     line, which draws nothing: the border is transparent. */
   .d3 .work {
     padding-left: calc(var(--d3-gutter) - var(--d3-card-frame));
     padding-right: calc(var(--d3-gutter) - var(--d3-card-frame));
-  }
-
-  /* The picture bleeds through the card's padding to the card's own edges.
-     The card is white on a white page, so that 24px of padding reads as a
-     white margin around the picture rather than as part of a card — which
-     is what it looked like. The text keeps the padding, so it still lands on
-     the gutter with the nav; only the picture runs wider. */
-  .d3 .project-link .preview-panel {
-    margin-left: calc(-1 * var(--d3-card-pad));
-    margin-right: calc(-1 * var(--d3-card-pad));
   }
 
   /* One column, since the pinned thumbnail that took the second one has
@@ -944,14 +951,17 @@ img { max-width: 100%; display: block; }
     gap: 0;                            /* the three parts space themselves —
                                           picture to title and title to blurb
                                           are not the same distance */
-    padding: var(--d3-card-pad);       /* the card is much larger here than on
-                                          a phone, and 16px read tight on it.
-                                          The picture cancels the horizontal
-                                          half of this with a negative margin */
+    /* Vertical only. Horizontal padding put white either side of the
+       picture — the card is white on a white page, so it read as a margin
+       around the picture rather than as a card. With none, the card's edge
+       IS the picture's edge, and the picture, the heading, the blurb and the
+       Work tab all land on the same line. The vertical half stays: it is
+       what holds the 56px between one card's blurb and the next picture. */
+    padding: var(--d3-card-pad) 0;
     background: #ffffff;
-    /* No outline. The thumbnail already draws its own black edge, and a grey
-       one just outside it read as a second frame around the same picture.
-       The border stays at 1px transparent so hover shifts nothing. */
+    /* Nothing drawn. The thumbnail already carries its own hairline, and a
+       second one around the same picture read as a frame. The border stays
+       at 1px transparent so hover shifts nothing. */
     border: 1px solid transparent;
     border-radius: 12px;               /* not the 8px the smaller cards use —
                                           a corner has to grow with its box */
@@ -998,10 +1008,7 @@ img { max-width: 100%; display: block; }
      card, sized by the panel's own aspect ratio. */
   .d3 .project-link .preview-panel {
     position: static;
-    /* auto, not 100%: the negative margins set further up have to be able to
-       pull the box wider. At 100% the width stays the padded width and the
-       picture just slides left, leaving the gap on the other side. */
-    width: auto;
+    width: 100%;
     aspect-ratio: var(--panel-ar);
     opacity: 1;
     transform: none;
