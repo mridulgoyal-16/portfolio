@@ -872,7 +872,10 @@ img { max-width: 100%; display: block; }
   .d3 .glass,
   .d3 .preview { display: none; }      /* script.js empties #preview anyway */
 
-  .d3 { --d3-card-frame: 25px; }       /* the card's 24px padding + 1px border */
+  .d3 {
+    --d3-card-pad: 24px;
+    --d3-card-frame: 25px;             /* the card's padding + its 1px border */
+  }
 
   .d3 .header,
   .d3 .nav,
@@ -900,6 +903,16 @@ img { max-width: 100%; display: block; }
   .d3 .work {
     padding-left: calc(var(--d3-gutter) - var(--d3-card-frame));
     padding-right: calc(var(--d3-gutter) - var(--d3-card-frame));
+  }
+
+  /* The picture bleeds through the card's padding to the card's own edges.
+     The card is white on a white page, so that 24px of padding reads as a
+     white margin around the picture rather than as part of a card — which
+     is what it looked like. The text keeps the padding, so it still lands on
+     the gutter with the nav; only the picture runs wider. */
+  .d3 .project-link .preview-panel {
+    margin-left: calc(-1 * var(--d3-card-pad));
+    margin-right: calc(-1 * var(--d3-card-pad));
   }
 
   /* One column, since the pinned thumbnail that took the second one has
@@ -931,8 +944,10 @@ img { max-width: 100%; display: block; }
     gap: 0;                            /* the three parts space themselves —
                                           picture to title and title to blurb
                                           are not the same distance */
-    padding: 24px;                     /* the card is much larger here than on
-                                          a phone, and 16px read tight on it */
+    padding: var(--d3-card-pad);       /* the card is much larger here than on
+                                          a phone, and 16px read tight on it.
+                                          The picture cancels the horizontal
+                                          half of this with a negative margin */
     background: #ffffff;
     /* No outline. The thumbnail already draws its own black edge, and a grey
        one just outside it read as a second frame around the same picture.
@@ -983,7 +998,10 @@ img { max-width: 100%; display: block; }
      card, sized by the panel's own aspect ratio. */
   .d3 .project-link .preview-panel {
     position: static;
-    width: 100%;
+    /* auto, not 100%: the negative margins set further up have to be able to
+       pull the box wider. At 100% the width stays the padded width and the
+       picture just slides left, leaving the gap on the other side. */
+    width: auto;
     aspect-ratio: var(--panel-ar);
     opacity: 1;
     transform: none;
