@@ -1673,7 +1673,10 @@ img { max-width: 100%; display: block; }
   flex-direction: column;
   height: 100%;
   padding: 24px;
-  border: 1px solid var(--border-primary);
+  /* Darker than --border-primary (#e8e8e8), which the chips and the arrows
+     still use: the card is the outer edge and needs to hold against the white
+     band, while the parts inside it should stay quieter than the card. */
+  border: 1px solid #aeaeae;
   border-radius: 0;
   background: #ffffff;
 }
@@ -1724,7 +1727,8 @@ img { max-width: 100%; display: block; }
   aspect-ratio: 4 / 3;
   object-fit: cover;
   margin-bottom: 24px;
-  border: 1px solid var(--border-primary);
+  /* No border. It was there to make an empty white frame visible on a white
+     card; with a real picture in it the outline only boxed the artwork in. */
   border-radius: 8px;
   /* Shows through while the picture loads, and stands in if one ever fails. */
   background: #ffffff;
