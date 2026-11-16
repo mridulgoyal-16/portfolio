@@ -422,3 +422,85 @@
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
   layout();
 })();
+
+
+/* ---------------------------------------------------------------
+   Work carousel.
+
+   The row scrolls on its own — trackpad, touch, shift+wheel, keyboard. This
+   only adds the two arrows and the counter, and reads the scroll position
+   rather than keeping an index of its own, so a flick, a drag and a click all
+   agree on which card is showing.
+   --------------------------------------------------------------- */
+
+(function () {
+  "use strict";
+
+  var row     = document.getElementById("cases");
+  var readout = document.getElementById("cases-index");
+  var total   = document.getElementById("cases-total");
+  if (!row) return;
+
+  var cards  = Array.prototype.slice.call(row.querySelectorAll(".case"));
+  var arrows = Array.prototype.slice.call(document.querySelectorAll(".cases-arrow"));
+  if (!cards.length) return;
+
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+
+  // Counted, not typed into the markup: adding or removing a card should not
+  // need the total changed in a second place.
+  if (total) total.textContent = pad(cards.length);
+
+  // Nearest card to the row's left edge wins. Comparing against the row rather
+  // than the viewport means this still reads correctly while the row is being
+  // dragged and no card is exactly in place.
+  function currentIndex() {
+    var left = row.getBoundingClientRect().left;
+    var best = 0;
+    var bestDistance = Infinity;
+    cards.forEach(function (card, i) {
+      var distance = Math.abs(card.getBoundingClientRect().left - left);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        best = i;
+      }
+    });
+    return best;
+  }
+
+  function sync() {
+    var i = currentIndex();
+    if (readout) readout.textContent = pad(i + 1);
+
+    // Measured against the real scroll extent, not the index: at the right-hand
+    // end the last card is already flush and nothing more can move, even though
+    // currentIndex() still reports the second-to-last card.
+    var max = row.scrollWidth - row.clientWidth;
+    arrows.forEach(function (arrow) {
+      var forward = Number(arrow.dataset.step) > 0;
+      arrow.disabled = forward ? row.scrollLeft >= max - 1 : row.scrollLeft <= 1;
+    });
+  }
+
+  arrows.forEach(function (arrow) {
+    arrow.addEventListener("click", function () {
+      var step = Number(arrow.dataset.step) || 1;
+      var next = Math.min(Math.max(currentIndex() + step, 0), cards.length - 1);
+      row.scrollTo({
+        left: cards[next].offsetLeft - cards[0].offsetLeft,
+        behavior: "smooth"
+      });
+    });
+  });
+
+  var queued = false;
+  row.addEventListener("scroll", function () {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(function () { queued = false; sync(); });
+  }, { passive: true });
+
+  window.addEventListener("resize", sync);
+  document.addEventListener("tabchange", sync);
+  sync();
+})();
