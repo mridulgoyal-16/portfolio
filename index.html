@@ -11,7 +11,7 @@
      lifetime, so a returning visitor can get new HTML with an old stylesheet
      and see a broken page. Changing the query makes it a new URL and forces a
      refetch. BUMP BOTH NUMBERS whenever you edit styles.css or script.js. -->
-<link rel="stylesheet" href="styles.css?v=144">
+<link rel="stylesheet" href="styles.css?v=146">
 </head>
 <!-- The card design is the site, so its class is set here rather than by
      script.js: added after load it would show a frame of another design
@@ -290,6 +290,61 @@
   </ul>
 </section>
 
+<!-- Connect. Outside the Work tabpanel above, so it stays on screen whatever
+     tab is selected. -->
+<section class="connect" id="connect" aria-labelledby="connect-heading">
+
+  <div class="connect-main">
+    <p class="connect-eyebrow">Connect</p>
+    <h2 class="connect-title" id="connect-heading">From users to design to impact</h2>
+    <p class="connect-lede">Behavioural research, information design and systems thinking, turned
+      into decisions people can act on. Always glad to talk through a problem.</p>
+
+    <ul class="connect-list">
+      <li>
+        <a class="connect-row connect-row--primary"
+           href="https://drive.google.com/file/d/1flktYtBIOMNU2IAVJWC6HTBtNyX7TMDx/view?usp=sharing"
+           target="_blank" rel="noopener noreferrer">
+          <span class="connect-row-label">Download</span>
+          <span class="connect-row-arrow" aria-hidden="true">&#8594;</span>
+          <span class="connect-row-value">My Resume</span>
+        </a>
+      </li>
+      <li>
+        <a class="connect-row" href="https://www.linkedin.com/in/mridulgoyal1699/"
+           target="_blank" rel="noopener noreferrer">
+          <span class="connect-row-label">Connect via</span>
+          <span class="connect-row-arrow" aria-hidden="true">&#8594;</span>
+          <span class="connect-row-value">in/mridulgoyal1699 at LinkedIn</span>
+        </a>
+      </li>
+      <li>
+        <!-- mailto, so the row does the thing it names rather than opening a tab. -->
+        <a class="connect-row" href="mailto:mridulgoyal1699@gmail.com">
+          <span class="connect-row-label">Reach out at</span>
+          <span class="connect-row-arrow" aria-hidden="true">&#8594;</span>
+          <span class="connect-row-value">mridulgoyal1699@gmail.com</span>
+        </a>
+      </li>
+      <li>
+        <a class="connect-row" href="https://medium.com/@mridul.goyal"
+           target="_blank" rel="noopener noreferrer">
+          <span class="connect-row-label">Read about my work</span>
+          <span class="connect-row-arrow" aria-hidden="true">&#8594;</span>
+          <span class="connect-row-value">medium.com/@mridul.goyal</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <aside class="connect-aside">
+    <p class="connect-shout">{ Let’s Talk }</p>
+    <p class="connect-availability">Open to full-time product, service and UX design roles</p>
+  </aside>
+
+</section>
+
+
 <!-- Visuals and About no longer have a tab, so nothing can reach them. The
      markup is kept rather than deleted: putting either back is a one-line
      change in the nav above, and the About panel is still the only place the
@@ -400,6 +455,6 @@
 </section>
 </main>
 
-<script src="script.js?v=144"></script>
+<script src="script.js?v=146"></script>
 </body>
 </html>
