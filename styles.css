@@ -1649,7 +1649,12 @@ img { max-width: 100%; display: block; }
   display: flex;
   gap: 24px;
   margin: 0;
-  padding: 0 var(--hero-gutter);
+  /* The vertical padding is not decoration — it stops the cards' top and
+     bottom borders being shaved off. overflow-x: auto forces overflow-y to
+     compute as auto too, so this box clips vertically at a whole pixel; the
+     cards measure 708.49px tall and sat flush against that edge, which ate
+     the 1px bottom rule. The padding gives the clip somewhere to land. */
+  padding: 2px var(--hero-gutter) 6px;
   list-style: none;
   overflow-x: auto;
   overscroll-behavior-x: contain;
@@ -1787,6 +1792,11 @@ img { max-width: 100%; display: block; }
 }
 
 .case-more:hover { text-decoration: underline; }
+
+/* Not a link, so it gets none of a link's affordances — no underline on
+   hover, no pointer cursor, nothing to click at. */
+.case-more--soon { cursor: default; }
+.case-more--soon:hover { text-decoration: none; }
 
 .case-more-arrow {
   display: block;
