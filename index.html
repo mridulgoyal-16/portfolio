@@ -11,7 +11,7 @@
      lifetime, so a returning visitor can get new HTML with an old stylesheet
      and see a broken page. Changing the query makes it a new URL and forces a
      refetch. BUMP BOTH NUMBERS whenever you edit styles.css or script.js. -->
-<link rel="stylesheet" href="styles.css?v=149">
+<link rel="stylesheet" href="styles.css?v=154">
 </head>
 <!-- The card design is the site, so its class is set here rather than by
      script.js: added after load it would show a frame of another design
@@ -291,6 +291,66 @@
   </ul>
 </section>
 
+<!-- Comics. One frame in view at a time; the row advances on a timer and can
+     be dragged. Everything below works without JS too — the track is an
+     ordinary scroller, so it stays swipeable and keyboard-scrollable. -->
+<section class="comics" aria-labelledby="comics-heading">
+
+  <div class="comics-intro">
+    <p class="comics-eyebrow">Visual</p>
+    <h2 class="comics-title" id="comics-heading">Tinkering with some comic ideas</h2>
+  </div>
+
+  <div class="comics-stage">
+    <ul class="comics-track" id="comics-track">
+      <li class="comic">
+        <!-- A -->
+        <img class="comic-art" src="assets/comics/comic-01.jpg" alt="A squirrel in the snow points at an acorn hanging from a bare tree: “I found a uni-corn.”"
+             width="1200" height="1200" draggable="false">
+      </li>
+      <li class="comic">
+        <!-- B -->
+        <img class="comic-art" src="assets/comics/comic-02.jpg" alt="Two caterpillars watch a butterfly pass. One asks when puberty will hit them; the other cannot wait to get old."
+             width="1200" height="1200" draggable="false" loading="lazy" decoding="async">
+      </li>
+      <li class="comic">
+        <!-- C -->
+        <img class="comic-art" src="assets/comics/comic-03.jpg" alt="Four panels: a friend congratulates someone on a pregnancy that turns out to be belly fat, then leaves quickly."
+             width="1200" height="1200" draggable="false" loading="lazy" decoding="async">
+      </li>
+      <li class="comic">
+        <!-- D -->
+        <img class="comic-art" src="assets/comics/comic-04.jpg" alt="A birdwatcher peers through a telescope while two birds, watching him back through binoculars, call a creep alert."
+             width="1200" height="1200" draggable="false" loading="lazy" decoding="async">
+      </li>
+      <li class="comic">
+        <!-- E -->
+        <img class="comic-art" src="assets/comics/comic-05.jpg" alt="An office of animals at the water cooler, with the one human among them asking whether she is dreaming."
+             width="1200" height="1200" draggable="false" loading="lazy" decoding="async">
+      </li>
+      <li class="comic">
+        <!-- F.1 -->
+        <img class="comic-art" src="assets/comics/comic-06.jpg" alt="A woman sneezes on the sofa while her laptop and tablet look on, worried: “Why doesn’t she just install antivirus like we do?”"
+             width="1200" height="1200" draggable="false" loading="lazy" decoding="async">
+      </li>
+      <li class="comic">
+        <!-- F.2 -->
+        <img class="comic-art" src="assets/comics/comic-07.jpg" alt="A mouse on a desk talks to a computer mouse: “Wait, humans want you in the house?”"
+             width="1200" height="1200" draggable="false" loading="lazy" decoding="async">
+      </li>
+      <li class="comic">
+        <!-- H -->
+        <img class="comic-art" src="assets/comics/comic-08.jpg" alt="A wizard leaves with a bag while a witch stirs her cauldron: “Try cooking some food once in a while.”"
+             width="1200" height="1200" draggable="false" loading="lazy" decoding="async">
+      </li>
+    </ul>
+    <!-- Filled by script.js from the slide count, so adding a comic is one
+         edit rather than two. -->
+    <div class="comics-dots" id="comics-dots" role="tablist" aria-label="Choose a comic"></div>
+  </div>
+
+</section>
+
 <!-- Connect. Outside the Work tabpanel above, so it stays on screen whatever
      tab is selected. -->
 <section class="connect" id="connect" aria-labelledby="connect-heading">
@@ -456,6 +516,6 @@
 </section>
 </main>
 
-<script src="script.js?v=149"></script>
+<script src="script.js?v=154"></script>
 </body>
 </html>

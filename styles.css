@@ -1573,6 +1573,7 @@ img { max-width: 100%; display: block; }
 /* Same eyebrow as HIGHLIGHTS — one rule, two places, so they cannot drift. */
 .highlights-label,
 .cases-eyebrow,
+.comics-eyebrow,
 .connect-eyebrow {
   margin: 0;
   font-size: 12px;
@@ -1806,6 +1807,150 @@ img { max-width: 100%; display: block; }
 .case-more:hover .case-more-arrow { transform: translate(2px, -2px); }
 
 
+/* Comics -------------------------------------------------------- */
+
+/* Heading on the left, one comic on the right. The intro column is the
+   narrower of the two: the comics are square and want the room. */
+.comics {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 48px;
+  padding: 72px var(--hero-gutter) 96px;
+  background: #ffffff;
+  border-top: 1px solid var(--border-primary);
+}
+
+.comics-title {
+  max-width: 16ch;
+  margin: 16px 0 0;
+  font-size: 34px;
+  font-weight: 500;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+
+/* The window. Square, because every comic is. */
+.comics-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 500px;
+  /* The 500px cap leaves slack in this column; without this it collected on
+     the right, so the comic sat 181px inboard of the gutter while the heading
+     sat on it. Pushes the stage to the column's right edge instead. */
+  margin-left: auto;
+}
+
+/* An ordinary scroller, so a trackpad, a touchscreen and the keyboard all
+   work before a line of JS runs. The script adds the timer, the dots and
+   mouse dragging on top. */
+.comics-track {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  cursor: grab;
+  /* Without this a drag selects the alt text and the page highlights blue. */
+  user-select: none;
+}
+
+.comics-track::-webkit-scrollbar { display: none; }
+
+/* Snapping has to be off while a pointer drag is driving scrollLeft, or the
+   browser keeps yanking the track back to the nearest slide mid-gesture. The
+   script snaps by hand on release. */
+.comics-track.is-dragging {
+  scroll-snap-type: none;
+  cursor: grabbing;
+}
+
+.comic {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+}
+
+.comic-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  /* The same edge the case-study cards carry, so the two sections' frames
+     read as one family. */
+  border: 1px solid #aeaeae;
+  background: #ffffff;
+  -webkit-user-drag: none;      /* Safari drags the image itself otherwise */
+}
+
+.comics-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* A circle at rest; the active one stretches into a pill of the same height
+   and runs the timer out as a fill, so the wait to the next frame is visible
+   rather than a surprise. */
+.comics-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50px;          /* not 50%, which would turn the pill oval */
+  background: #d4d4d4;
+  overflow: hidden;             /* clips the fill to the pill's own corners */
+  cursor: pointer;
+  transition: width 0.3s var(--ease-out), background-color 0.2s var(--ease-out);
+}
+
+.comics-dot:hover { background: #a3a3a3; }
+
+.comics-dot[aria-selected="true"] {
+  width: 36px;
+  background: #d4dcf6;          /* the track: the hero blue, well lightened */
+}
+
+.comics-dot-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  border-radius: inherit;
+  background: #0024c8;          /* the hero blue, same as "Learn more" */
+}
+
+/* --comic-delay is written by script.js from the same constant that drives
+   the timer, so the bar and the step can never fall out of sync. */
+.comics-dot[aria-selected="true"] .comics-dot-fill {
+  animation: comic-progress var(--comic-delay, 3000ms) linear forwards;
+}
+
+/* Hover, drag, focus, hidden tab: the timer holds, so the bar holds with it. */
+.comics-dots.is-paused .comics-dot-fill { animation-play-state: paused; }
+
+@keyframes comic-progress {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+/* No timer under reduced motion, so there is nothing to count down — the
+   active pill just reads as filled. */
+@media (prefers-reduced-motion: reduce) {
+  .comics-dot[aria-selected="true"] .comics-dot-fill {
+    animation: none;
+    width: 100%;
+  }
+}
+
+
 /* Connect ------------------------------------------------------- */
 
 /* Two panels that each run the full height of the section and meet on a
@@ -1826,10 +1971,13 @@ img { max-width: 100%; display: block; }
 .connect-title {
   max-width: 14ch;              /* breaks the phrase over two or three lines */
   margin: 16px 0 0;
-  font-size: clamp(40px, 4.4vw, 64px);
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  /* The same 34px as the Work heading, so the two section headings carry
+     equal weight. It was clamp(40px, 4.4vw, 64px) — 63px at 1440, which made
+     this the loudest thing on the page after the hero. */
+  font-size: 34px;
+  font-weight: 500;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
   color: #000000;
 }
 
@@ -1969,6 +2117,10 @@ img { max-width: 100%; display: block; }
 
   /* The aside stacks under the panel rather than beside it, so its rule moves
      from the left edge to the top. */
+  .comics { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-bottom: 64px; }
+  .comics-stage { max-width: none; margin-left: 0; }
+  .comics-title { max-width: none; font-size: 28px; }
+
   .connect { grid-template-columns: minmax(0, 1fr); }
   .connect-main { padding-bottom: 64px; }
   .connect-aside {
@@ -2011,6 +2163,9 @@ img { max-width: 100%; display: block; }
   .case { flex-basis: 84vw; }
   .case-card { padding: 20px; }
   .case-title { font-size: 20px; }
+
+  .comics { padding-top: 48px; }
+  .comics-title { font-size: 26px; }
 
   .connect-main { padding-top: 48px; }
   .connect-title { max-width: none; }
