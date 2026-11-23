@@ -1914,7 +1914,7 @@ img { max-width: 100%; display: block; }
 
 .comics-dot[aria-selected="true"] {
   width: 36px;
-  background: #d4dcf6;          /* the track: the hero blue, well lightened */
+  background: #dcdcdc;          /* the track the fill runs along */
 }
 
 .comics-dot-fill {
@@ -1924,13 +1924,15 @@ img { max-width: 100%; display: block; }
   bottom: 0;
   width: 0;
   border-radius: inherit;
-  background: #0024c8;          /* the hero blue, same as "Learn more" */
+  background: #1c1c1c;
 }
 
 /* --comic-delay is written by script.js from the same constant that drives
    the timer, so the bar and the step can never fall out of sync. */
 .comics-dot[aria-selected="true"] .comics-dot-fill {
-  animation: comic-progress var(--comic-delay, 3000ms) linear forwards;
+  /* The fallback only applies if the script never ran, in which case nothing
+     is advancing anyway — DELAY in script.js is the real number. */
+  animation: comic-progress var(--comic-delay, 4000ms) linear forwards;
 }
 
 /* Hover, drag, focus, hidden tab: the timer holds, so the bar holds with it. */

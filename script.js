@@ -509,7 +509,7 @@
 /* ---------------------------------------------------------------
    Comics carousel.
 
-   One frame in view, advancing every three seconds and looping. The track
+   One frame in view, advancing on a timer and looping. The track
    is a plain scroller in the markup, so swipe, trackpad and keyboard already
    work; this adds the timer, the dots and mouse dragging.
 
@@ -521,7 +521,9 @@
 (function () {
   "use strict";
 
-  var DELAY = 3000;
+  // The dwell between frames. The CSS fill reads this same number through
+  // --comic-delay, so changing it here is the only edit needed.
+  var DELAY = 4000;
 
   var track = document.getElementById("comics-track");
   var dotsBox = document.getElementById("comics-dots");
