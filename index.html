@@ -11,7 +11,7 @@
      lifetime, so a returning visitor can get new HTML with an old stylesheet
      and see a broken page. Changing the query makes it a new URL and forces a
      refetch. BUMP BOTH NUMBERS whenever you edit styles.css or script.js. -->
-<link rel="stylesheet" href="styles.css?v=156">
+<link rel="stylesheet" href="styles.css?v=157">
 </head>
 <!-- The card design is the site, so its class is set here rather than by
      script.js: added after load it would show a frame of another design
@@ -19,170 +19,29 @@
      afford the flash. -->
 <body class="d3">
 
-<!-- Hero. Figma "Portfolio/case studies" → node 3076:5344, a 1728x790 frame.
-     Every icon below is lifted from that frame's own export, so the glyphs are
-     the designed vectors rather than look-alikes. Three of them keep the
-     frame's coordinates in their viewBox (e.g. "1532 40 32 32") instead of
-     being re-origined to 0 0: the path data is then byte-identical to Figma's,
-     which is one less thing to get subtly wrong. The logo's four petals spill
-     past its 56px box on purpose — the SVG viewport clips them, the same way
-     Figma's clip-path does. -->
-<section class="hero">
-
-    <div class="hero-bar">
-      <a class="hero-mark" href="./" aria-label="Mridul Goyal — home">
-        <svg width="56" height="56" viewBox="100 28 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-          <path d="M125.275 31.5709C126.485 29.4741 129.512 29.4741 130.722 31.5709L150.517 65.8557C151.727 67.9525 150.214 70.5736 147.793 70.5736H108.204C105.783 70.5736 104.27 67.9525 105.48 65.8557L125.275 31.5709Z" fill="#031B59"/>
-          <path d="M147.794 41.4267C150.215 41.4267 151.728 44.0477 150.518 46.1445L130.723 80.4293C129.513 82.5262 126.486 82.5262 125.276 80.4293L105.481 46.1445C104.271 44.0477 105.784 41.4267 108.205 41.4267L147.794 41.4267Z" fill="#031B59"/>
-          <path d="M138.255 33.6616C140.373 32.4887 142.966 34.0486 142.923 36.4694L142.215 76.0517C142.172 78.4726 139.524 79.9387 137.449 78.6908L103.524 58.2866C101.449 57.0387 101.503 54.0127 103.621 52.8398L138.255 33.6616Z" fill="#031B59"/>
-          <path d="M152.204 51.7161C154.374 52.7899 154.568 55.8102 152.553 57.1527L119.608 79.1037C117.593 80.4462 114.88 79.104 114.725 76.6878L112.187 37.1805C112.032 34.7643 114.551 33.0861 116.721 34.1599L152.204 51.7161Z" fill="#031B59"/>
-          <path d="M118.666 58.9805H117.162V51.1565H118.506L118.65 52.1805C119.05 51.4445 119.882 50.9325 120.986 50.9325C122.202 50.9325 123.066 51.5405 123.466 52.5165C123.834 51.5405 124.778 50.9325 125.994 50.9325C127.786 50.9325 128.874 52.0525 128.874 53.8605V58.9805H127.402V54.2285C127.402 52.9965 126.714 52.2925 125.658 52.2925C124.522 52.2925 123.77 53.0925 123.77 54.3405V58.9805H122.282V54.2125C122.282 52.9805 121.61 52.3085 120.554 52.3085C119.418 52.3085 118.666 53.0925 118.666 54.3405V58.9805ZM130.143 54.8685C130.143 52.6605 131.567 50.9325 133.839 50.9325C135.103 50.9325 136.079 51.5085 136.575 52.4845L136.687 51.1565H138.031V58.6605C138.031 61.1245 136.511 62.6925 134.111 62.6925C131.983 62.6925 130.527 61.4925 130.239 59.5085H131.743C131.935 60.6605 132.799 61.3325 134.111 61.3325C135.583 61.3325 136.543 60.3725 136.543 58.8845V57.3165C136.031 58.2285 135.007 58.7725 133.775 58.7725C131.551 58.7725 130.143 57.0605 130.143 54.8685ZM131.647 54.8365C131.647 56.3085 132.559 57.4605 134.031 57.4605C135.551 57.4605 136.479 56.3725 136.479 54.8365C136.479 53.3325 135.583 52.2445 134.047 52.2445C132.543 52.2445 131.647 53.3965 131.647 54.8365ZM141.002 59.1725C140.378 59.1725 139.85 58.6605 139.85 58.0525C139.85 57.4285 140.378 56.9165 141.002 56.9165C141.61 56.9165 142.138 57.4285 142.138 58.0525C142.138 58.6605 141.61 59.1725 141.002 59.1725Z" fill="white"/>
-        </svg>
-      </a>
-
-      <!-- Resume leaves for Drive, so it is an <a> and sits OUTSIDE the
-           tablist: a tablist may only contain tabs, and a link that navigates
-           away is not one. It still carries .nav-item, so it is styled by the
-           same rules and reads as the pill beside it.
-
-           Work stays a real tab. script.js finds it by .nav-item[role="tab"]
-           and by the tab-*/panel-* id pairing, so that wiring is untouched. -->
-      <div class="hero-nav">
-        <nav class="nav" role="tablist" aria-label="Sections">
-          <button class="nav-item" type="button" role="tab"
-                  id="tab-work" aria-controls="panel-work" aria-selected="true">Work</button>
-        </nav>
-        <a class="nav-item nav-item--link"
-           href="https://drive.google.com/file/d/1CcWhSsP36dGcBqtkCYBRir35ng5uBX4z/view?usp=sharing"
-           target="_blank" rel="noopener noreferrer">Resume</a>
-      </div>
-
-      <ul class="hero-socials">
-        <li><a href="https://www.linkedin.com/in/mridulgoyal1699/" target="_blank" rel="noopener noreferrer">
-          <svg class="hero-social-icon" width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M27 3H5C4.46957 3 3.96086 3.21071 3.58579 3.58579C3.21071 3.96086 3 4.46957 3 5V27C3 27.5304 3.21071 28.0391 3.58579 28.4142C3.96086 28.7893 4.46957 29 5 29H27C27.5304 29 28.0391 28.7893 28.4142 28.4142C28.7893 28.0391 29 27.5304 29 27V5C29 4.46957 28.7893 3.96086 28.4142 3.58579C28.0391 3.21071 27.5304 3 27 3ZM12 22C12 22.2652 11.8946 22.5196 11.7071 22.7071C11.5196 22.8946 11.2652 23 11 23C10.7348 23 10.4804 22.8946 10.2929 22.7071C10.1054 22.5196 10 22.2652 10 22V14C10 13.7348 10.1054 13.4804 10.2929 13.2929C10.4804 13.1054 10.7348 13 11 13C11.2652 13 11.5196 13.1054 11.7071 13.2929C11.8946 13.4804 12 13.7348 12 14V22ZM11 12C10.7033 12 10.4133 11.912 10.1666 11.7472C9.91997 11.5824 9.72771 11.3481 9.61418 11.074C9.50065 10.7999 9.47094 10.4983 9.52882 10.2074C9.5867 9.91639 9.72956 9.64912 9.93934 9.43934C10.1491 9.22956 10.4164 9.0867 10.7074 9.02882C10.9983 8.97094 11.2999 9.00065 11.574 9.11418C11.8481 9.22771 12.0824 9.41997 12.2472 9.66665C12.412 9.91332 12.5 10.2033 12.5 10.5C12.5 10.8978 12.342 11.2794 12.0607 11.5607C11.7794 11.842 11.3978 12 11 12ZM23 22C23 22.2652 22.8946 22.5196 22.7071 22.7071C22.5196 22.8946 22.2652 23 22 23C21.7348 23 21.4804 22.8946 21.2929 22.7071C21.1054 22.5196 21 22.2652 21 22V17.5C21 16.837 20.7366 16.2011 20.2678 15.7322C19.7989 15.2634 19.163 15 18.5 15C17.837 15 17.2011 15.2634 16.7322 15.7322C16.2634 16.2011 16 16.837 16 17.5V22C16 22.2652 15.8946 22.5196 15.7071 22.7071C15.5196 22.8946 15.2652 23 15 23C14.7348 23 14.4804 22.8946 14.2929 22.7071C14.1054 22.5196 14 22.2652 14 22V14C14.0012 13.7551 14.0923 13.5191 14.256 13.3369C14.4197 13.1546 14.6446 13.0388 14.688 13.0114C15.1314 12.9839 15.3764 13.0468 15.5765 13.188C15.7767 13.3292 15.918 13.539 15.9738 13.7775C16.6502 13.3186 17.4389 13.0526 18.2552 13.0081C19.0714 12.9637 19.8844 13.1424 20.6067 13.5251C21.329 13.9078 21.9335 14.48 22.3551 15.1803C22.7768 15.8806 22.9997 16.6825 23 17.5V22Z" fill="currentColor"/></svg>
-          <span class="u-sr">LinkedIn</span>
-        </a></li>
-        <li><a href="mailto:mridulgoyal1699@gmail.com">
-          <svg class="hero-social-icon" width="24" height="24" viewBox="1532 40 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M1560 46H1536C1535.73 46 1535.48 46.1054 1535.29 46.2929C1535.11 46.4804 1535 46.7348 1535 47V64C1535 64.5304 1535.21 65.0391 1535.59 65.4142C1535.96 65.7893 1536.47 66 1537 66H1559C1559.53 66 1560.04 65.7893 1560.41 65.4142C1560.79 65.0391 1561 64.5304 1561 64V47C1561 46.7348 1560.89 46.4804 1560.71 46.2929C1560.52 46.1054 1560.27 46 1560 46ZM1559 64H1537V49.2738L1547.32 58.7375C1547.51 58.9069 1547.75 59.0008 1548 59.0008C1548.25 59.0008 1548.49 58.9069 1548.68 58.7375L1559 49.2738V64Z" fill="currentColor"/></svg>
-          <span class="u-sr">Email</span>
-        </a></li>
-        <li><a href="https://medium.com/@mridul.goyal" target="_blank" rel="noopener noreferrer">
-          <svg class="hero-social-icon" width="24" height="24" viewBox="1596 40 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M1613 56C1613 57.5823 1612.53 59.129 1611.65 60.4446C1610.77 61.7602 1609.52 62.7855 1608.06 63.391C1606.6 63.9965 1604.99 64.155 1603.44 63.8463C1601.89 63.5376 1600.46 62.7757 1599.34 61.6569C1598.22 60.538 1597.46 59.1126 1597.15 57.5607C1596.85 56.0089 1597 54.4003 1597.61 52.9385C1598.21 51.4767 1599.24 50.2273 1600.56 49.3482C1601.87 48.4692 1603.42 48 1605 48C1607.12 48.0023 1609.15 48.8459 1610.65 50.3457C1612.15 51.8455 1613 53.879 1613 56ZM1619 48C1618.29 48 1616.95 48.345 1615.96 50.6562C1615.34 52.1 1615 54 1615 56C1615 58 1615.34 59.9 1615.96 61.3438C1616.95 63.655 1618.29 64 1619 64C1619.71 64 1621.05 63.655 1622.04 61.3438C1622.66 59.9 1623 58 1623 56C1623 54 1622.66 52.1 1622.04 50.6562C1621.05 48.345 1619.71 48 1619 48ZM1626 48C1625.73 48 1625.48 48.1054 1625.29 48.2929C1625.11 48.4804 1625 48.7348 1625 49V63C1625 63.2652 1625.11 63.5196 1625.29 63.7071C1625.48 63.8946 1625.73 64 1626 64C1626.27 64 1626.52 63.8946 1626.71 63.7071C1626.89 63.5196 1627 63.2652 1627 63V49C1627 48.7348 1626.89 48.4804 1626.71 48.2929C1626.52 48.1054 1626.27 48 1626 48Z" fill="currentColor"/></svg>
-          <span class="u-sr">Medium</span>
-        </a></li>
-      </ul>
-    </div>
-
-  <div class="hero-main">
-    <div class="hero-lede-col">
-      <!-- Three tones, not two: the greeting and the closing clause both drop to
-     --hero-dim so the middle — what Mridul actually does — is the only part
-     at full white. Same shape aabhakale.design uses on its own headline. -->
-<h1 class="hero-lede"><span class="hero-lede-dim">hi! i’m Mridul</span>, a service and product designer, bridging behavioural research, information design and systems thinking,<span class="hero-lede-dim"> to turn ambiguity into clear, human-centred decisions.</span></h1>
-    </div>
-
-    <div class="hero-facts">
-      <div class="hero-fact">
-        <h2 class="hero-fact-label">Roles I’m looking for</h2>
-        <ul class="hero-fact-list">
-          <li>Product designer</li>
-          <li>Service designer</li>
-          <li>UX designer</li>
-        </ul>
-      </div>
-
-      <div class="hero-fact">
-        <h2 class="hero-fact-label">Skills</h2>
-        <ul class="hero-fact-list">
-          <li>Insights and UX strategy</li>
-          <li>Qualitative and design research</li>
-          <li>Stakeholder facilitation</li>
-          <li>Experience and Product strategy</li>
-        </ul>
-      </div>
-    </div>
+<header class="header">
+  <span class="avatar">
+    <img src="assets/avatar_new.png" alt="Mridul Goyal" width="70" height="70">
+  </span>
+  <div class="identity">
+    <h1 class="name">Mridul Goyal</h1>
+    <p class="role">Product designer @ <a class="role-link" href="https://www.yulu.bike" target="_blank" rel="noopener noreferrer">Yulu</a></p>
   </div>
+</header>
 
-  <!-- Spans the full hero, under both columns — not part of .hero-main, so the
-       vertical rule between the lede and the facts stops above it. -->
-  <div class="hero-previously">
-    <span class="hero-previously-label">Previously at</span>
-    <ul class="hero-previously-list">
-      <li class="hero-previously-chip">
-        <img class="hero-previously-logo" src="assets/logos/yulu.png" alt="" width="24" height="24">Yulu
-      </li>
-      <li class="hero-previously-chip">
-        <img class="hero-previously-logo" src="assets/logos/pocketfm.png" alt="" width="24" height="24">PocketFM
-      </li>
-      <li class="hero-previously-chip">
-        <img class="hero-previously-logo" src="assets/logos/redbaton.png" alt="" width="24" height="24">Red Baton
-      </li>
-    </ul>
-  </div>
-
-</section>
-
-<!-- White band directly under the hero. Five equal columns at desktop, so the
-     numbers line up on a grid rather than on the width of their captions. -->
-<section class="highlights" aria-labelledby="highlights-label">
-  <h2 class="highlights-label" id="highlights-label">Highlights</h2>
-  <ul class="highlights-grid">
-    <li class="highlight">
-      <span class="highlight-figure">8</span>
-      <span class="highlight-caption">Types of users designed for</span>
-    </li>
-    <li class="highlight">
-      <span class="highlight-figure">14+</span>
-      <span class="highlight-caption">Research conversations, lived experience</span>
-    </li>
-    <li class="highlight">
-      <span class="highlight-figure">5</span>
-      <span class="highlight-caption">Clients handled</span>
-    </li>
-    <li class="highlight">
-      <span class="highlight-figure">20+</span>
-      <span class="highlight-caption">User journeys untangled</span>
-    </li>
-    <li class="highlight">
-      <span class="highlight-figure">45+</span>
-      <span class="highlight-caption">Actionable insights across findings</span>
-    </li>
-  </ul>
-</section>
+<nav class="nav" role="tablist" aria-label="Sections">
+  <button class="nav-item" type="button" role="tab"
+          id="tab-work" aria-controls="panel-work" aria-selected="true">Work</button>
+  <button class="nav-item" type="button" role="tab"
+          id="tab-visuals" aria-controls="panel-visuals" aria-selected="false">Visuals</button>
+  <button class="nav-item" type="button" role="tab"
+          id="tab-about" aria-controls="panel-about" aria-selected="false">About</button>
+</nav>
 
 <main>
-<!-- Work. Replaces the travelling-pill list and its pinned preview: the cards
-     carry their own picture now and the row scrolls sideways. The old markup
-     is in git history if the list is ever wanted back. -->
 <section class="cases-section panel" id="panel-work" role="tabpanel" aria-labelledby="tab-work">
 
-  <div class="cases-head">
-    <div class="cases-heading">
-      <!-- A <p>, not a heading: .cases-title below is already this section's
-           h2, and a second one would split it into two sections in the
-           outline for no gain. -->
-      <p class="cases-eyebrow">Selected work</p>
-      <!-- The break is explicit rather than left to a max-width: the line
-           lands in the same place at every desktop size instead of moving a
-           word as the window changes. It is hidden on a phone, where the
-           heading already wraps past two lines on its own. -->
-      <h2 class="cases-title">Selected work across research,<br class="cases-title-break"> design and systems.</h2>
-    </div>
-
-    <div class="cases-controls">
-      <p class="cases-count"><span id="cases-index">01</span> / <span id="cases-total">04</span></p>
-      <!-- Buttons, not links: they move the scroller, they do not navigate.
-           The row is keyboard- and trackpad-scrollable without them. -->
-      <button class="cases-arrow" type="button" data-step="-1" aria-label="Previous work" aria-controls="cases">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M4 12h16M4 12l6-6M4 12l6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-      <button class="cases-arrow" type="button" data-step="1" aria-label="Next work" aria-controls="cases">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M20 12H4M20 12l-6-6M20 12l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- The chips are the same three on every card for now, and every picture is
+ <!-- The chips are the same three on every card for now, and every picture is
        an empty frame: both are placeholders waiting on real content. -->
   <ul class="cases" id="cases">
 
@@ -291,125 +150,6 @@
   </ul>
 </section>
 
-<!-- Comics. One frame in view at a time; the row advances on a timer and can
-     be dragged. Everything below works without JS too — the track is an
-     ordinary scroller, so it stays swipeable and keyboard-scrollable. -->
-<section class="comics" aria-labelledby="comics-heading">
-
-  <div class="comics-intro">
-    <p class="comics-eyebrow">Visual</p>
-    <h2 class="comics-title" id="comics-heading">Tinkering with some comic ideas</h2>
-  </div>
-
-  <div class="comics-stage">
-    <ul class="comics-track" id="comics-track">
-      <li class="comic">
-        <!-- A -->
-        <img class="comic-art" src="assets/comics/comic-01.jpg" alt="A squirrel in the snow points at an acorn hanging from a bare tree: “I found a uni-corn.”"
-             width="1200" height="1200" draggable="false">
-      </li>
-      <li class="comic">
-        <!-- B -->
-        <img class="comic-art" src="assets/comics/comic-02.jpg" alt="Two caterpillars watch a butterfly pass. One asks when puberty will hit them; the other cannot wait to get old."
-             width="1200" height="1200" draggable="false" loading="lazy" decoding="async">
-      </li>
-      <li class="comic">
-        <!-- C -->
-        <img class="comic-art" src="assets/comics/comic-03.jpg" alt="Four panels: a friend congratulates someone on a pregnancy that turns out to be belly fat, then leaves quickly."
-             width="1200" height="1200" draggable="false" loading="lazy" decoding="async">
-      </li>
-      <li class="comic">
-        <!-- D -->
-        <img class="comic-art" src="assets/comics/comic-04.jpg" alt="A birdwatcher peers through a telescope while two birds, watching him back through binoculars, call a creep alert."
-             width="1200" height="1200" draggable="false" loading="lazy" decoding="async">
-      </li>
-      <li class="comic">
-        <!-- E -->
-        <img class="comic-art" src="assets/comics/comic-05.jpg" alt="An office of animals at the water cooler, with the one human among them asking whether she is dreaming."
-             width="1200" height="1200" draggable="false" loading="lazy" decoding="async">
-      </li>
-      <li class="comic">
-        <!-- F.1 -->
-        <img class="comic-art" src="assets/comics/comic-06.jpg" alt="A woman sneezes on the sofa while her laptop and tablet look on, worried: “Why doesn’t she just install antivirus like we do?”"
-             width="1200" height="1200" draggable="false" loading="lazy" decoding="async">
-      </li>
-      <li class="comic">
-        <!-- F.2 -->
-        <img class="comic-art" src="assets/comics/comic-07.jpg" alt="A mouse on a desk talks to a computer mouse: “Wait, humans want you in the house?”"
-             width="1200" height="1200" draggable="false" loading="lazy" decoding="async">
-      </li>
-      <li class="comic">
-        <!-- H -->
-        <img class="comic-art" src="assets/comics/comic-08.jpg" alt="A wizard leaves with a bag while a witch stirs her cauldron: “Try cooking some food once in a while.”"
-             width="1200" height="1200" draggable="false" loading="lazy" decoding="async">
-      </li>
-    </ul>
-    <!-- Filled by script.js from the slide count, so adding a comic is one
-         edit rather than two. -->
-    <div class="comics-dots" id="comics-dots" role="tablist" aria-label="Choose a comic"></div>
-  </div>
-
-</section>
-
-<!-- Connect. Outside the Work tabpanel above, so it stays on screen whatever
-     tab is selected. -->
-<section class="connect" id="connect" aria-labelledby="connect-heading">
-
-  <div class="connect-main">
-    <p class="connect-eyebrow">Connect</p>
-    <h2 class="connect-title" id="connect-heading">From users to design to impact</h2>
-    <p class="connect-lede">Behavioural research, information design and systems thinking, turned
-      into decisions people can act on. Always glad to talk through a problem.</p>
-
-    <ul class="connect-list">
-      <li>
-        <a class="connect-row connect-row--primary"
-           href="https://drive.google.com/file/d/1CcWhSsP36dGcBqtkCYBRir35ng5uBX4z/view?usp=sharing"
-           target="_blank" rel="noopener noreferrer">
-          <span class="connect-row-label">Download</span>
-          <span class="connect-row-arrow" aria-hidden="true">&#8594;</span>
-          <span class="connect-row-value">My Resume</span>
-        </a>
-      </li>
-      <li>
-        <a class="connect-row" href="https://www.linkedin.com/in/mridulgoyal1699/"
-           target="_blank" rel="noopener noreferrer">
-          <span class="connect-row-label">Connect via</span>
-          <span class="connect-row-arrow" aria-hidden="true">&#8594;</span>
-          <span class="connect-row-value">in/mridulgoyal1699 at LinkedIn</span>
-        </a>
-      </li>
-      <li>
-        <!-- mailto, so the row does the thing it names rather than opening a tab. -->
-        <a class="connect-row" href="mailto:mridulgoyal1699@gmail.com">
-          <span class="connect-row-label">Reach out at</span>
-          <span class="connect-row-arrow" aria-hidden="true">&#8594;</span>
-          <span class="connect-row-value">mridulgoyal1699@gmail.com</span>
-        </a>
-      </li>
-      <li>
-        <a class="connect-row" href="https://medium.com/@mridul.goyal"
-           target="_blank" rel="noopener noreferrer">
-          <span class="connect-row-label">Read about my work</span>
-          <span class="connect-row-arrow" aria-hidden="true">&#8594;</span>
-          <span class="connect-row-value">medium.com/@mridul.goyal</span>
-        </a>
-      </li>
-    </ul>
-  </div>
-
-  <aside class="connect-aside">
-    <p class="connect-shout">{ Let’s Talk }</p>
-    <p class="connect-availability">Open to full-time product, service and UX design roles</p>
-  </aside>
-
-</section>
-
-
-<!-- Visuals and About no longer have a tab, so nothing can reach them. The
-     markup is kept rather than deleted: putting either back is a one-line
-     change in the nav above, and the About panel is still the only place the
-     photo, the "Worked with" logos and the contact block live. -->
 <section class="panel visuals" id="panel-visuals" role="tabpanel" aria-labelledby="tab-visuals" hidden>
   <!-- No fixed columns: is-wide makes a piece two columns across and the rest
        flow around it, so the grid reads as a mosaic rather than three stacks.
@@ -456,7 +196,7 @@
           <img class="worked-logo" src="assets/logos/yulu.png" alt="" width="24" height="24">Yulu
         </li>
         <li class="worked-item">
-          <img class="worked-logo" src="assets/logos/pocketfm.png" alt="" width="24" height="24">PocketFM
+          <img class="worked-logo" src="assets/logos/pocketfm.png" alt="" width="24" height="24">Pocket FM
         </li>
         <li class="worked-item">
           <img class="worked-logo" src="assets/logos/redbaton.png" alt="" width="24" height="24">Red Baton
@@ -516,6 +256,6 @@
 </section>
 </main>
 
-<script src="script.js?v=156"></script>
+<script src="script.js?v=157"></script>
 </body>
 </html>

@@ -85,12 +85,6 @@ img { max-width: 100%; display: block; }
    corners of the source PNG. */
 :root { --avatar-size: 70px; }
 
-/* The hero frame's 100px gutter is 5.787% of its 1728px width. Held as a vw so
-   the hero keeps the same proportion on a wider screen and gives ground on a
-   narrower one, with a 24px floor so it never reaches the phone's edge. On
-   :root because the white Highlights band shares the same edge. */
-:root { --hero-gutter: clamp(24px, 5.787vw, 100px); }
-
 .avatar {
   flex: none;
   width: var(--avatar-size);
@@ -1143,404 +1137,35 @@ img { max-width: 100%; display: block; }
   .glass,
   .preview-panel,
   .arrow,
-  .nav-item,
-  .hero-socials a {
+  .nav-item {
     transition-duration: 0.01ms !important;
   }
   .preview-panel { filter: none; transform: none; }
-  /* The colour still changes on hover — only the travel is dropped. */
-  .hero-socials a:hover,
-  .hero-socials a:focus-visible { transform: none; }
 }
 
 
-/* ---------------------------------------------------------------
-   Hero
-   Figma: "Portfolio/case studies" → node 3076:5344, a 1728x790 frame.
+/* === ported from the current build: Work cards === */
 
-   This block is LAST in the file on purpose. It restyles .nav and .nav-item,
-   which the D1/D2/D3 blocks above also touch at the same specificity
-   (.d3 .nav is 0,2,0 and so is .hero .nav), so source order is what decides
-   the winner. Moving this block up would hand the gutters back to .d3.
-   --------------------------------------------------------------- */
+/* The hero frame's 100px gutter is 5.787% of its 1728px width. Held as a vw so
+   the hero keeps the same proportion on a wider screen and gives ground on a
+   narrower one, with a 24px floor so it never reaches the phone's edge. On
+   :root because the white Highlights band shares the same edge. */
+:root { --hero-gutter: clamp(24px, 5.787vw, 100px); }
 
-.hero {
-  --hero-bg:  #0024c8;
-  --hero-ink: #ffffff;        /* 10.1:1 on the blue */
-
-  /* The muted tone is WHITE AT AN ALPHA, not the frame's flat #7e93e8. Three
-     reasons, in order of how much they matter:
-
-     1. #7e93e8 measured 3.74:1, under the 4.5:1 floor — the thing flagged
-        twice about the 9px labels. 70% white computes to #b2bff0 over this
-        blue, which is 5.5:1 and clears it everywhere.
-     2. Hover has somewhere to go. Muted → full white is one property moving
-        from 0.7 to 1, so every quiet link brightens the same way without a
-        second hex to keep in step.
-     3. One tone, not two. If the blue is ever retuned the muted text follows
-        it instead of drifting.
-
-     --hero-dim is the same idea one step quieter, and is ONLY for the 38px
-     headline tint: 4.4:1 passes the large-text floor of 3:1 comfortably but
-     would not pass for body copy. Do not reuse it on anything small. */
-  --hero-muted: rgba(255, 255, 255, 0.7);    /* 5.5:1 — any size */
-  --hero-dim:   rgba(255, 255, 255, 0.6);    /* 4.4:1 — 38px headline only */
-  --hero-rule:  rgba(255, 255, 255, 0.22);
-
-  /* --hero-gutter lives on :root, not here: the Highlights band sits outside
-     .hero and has to start on the same left edge as the headline. */
-
-  display: flex;
-  flex-direction: column;
-  /* The CTA row used to be the last child and carried 32px of bottom padding.
-     Now that it lives inside the lede column, the facts column is what reaches
-     the bottom of the hero — and without this the last skill sat exactly on
-     the blue/white seam. */
-  padding-bottom: 32px;
-  background: var(--hero-bg);
-  color: var(--hero-ink);
-}
-
-/* Top bar ------------------------------------------------------- */
-
-.hero-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-  padding: 24px var(--hero-gutter);
-}
-
-/* The mark and the socials each take an equal share of what is left, so the
-   tabs land on the centre of the bar rather than on the midpoint between two
-   sides of unequal width — which is where space-between alone put them. */
-.hero-mark { flex: 1 1 0; display: block; line-height: 0; }
-.hero-mark svg { display: block; }
-
-/* Holds the tablist and the Resume link side by side as one row of pills.
-   They are separate elements for ARIA's sake, not visual ones, so the gap
-   here has to match the tablist's own. */
-.hero-nav {
-  display: flex;
-  align-items: center;
-  /* 8px + the items' 20px side padding = 48px of clear space between the two
-     words. The gap alone is not the spacing you see: each pill carries its own
-     padding, so the two have to be set together. */
-  gap: 8px;
-}
-
-/* The nav is a plain row here. Everything below undoes what .nav and
-   .d3 .nav set for the old white header: the sticky positioning, the white
-   background, the 400px gutters, the underline and the 16px type. */
-.hero .nav {
-  position: static;
-  z-index: auto;
-  gap: 8px;
-  padding: 0;
-  background: none;
-}
-
-.hero .nav-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Hugs its word rather than the frame's fixed 120px: at 120 the two labels
-     sat 104px apart, because most of that width was slack inside the pills. */
-  width: auto;
-  /* Fixed height rather than symmetric padding: at 24px the text's own line
-     box is about 32px, so padding alone would land on 48 only by accident and
-     would drift the moment the type changed. */
-  height: 48px;
-  padding: 0 20px;
-  border: 0;
-  border-radius: 50px;
-  background: none;
-  /* 16px, not the frame's 24px. At 24 the word nearly filled the 48px pill
-     and the tabs read as the largest thing in the hero after the headline —
-     louder than the audience row and the CTA beneath them, which is backwards.
-     aabhakale.design sets the same nav at 14.4px. */
-  font-size: 16px;
-  font-weight: 500;
-  line-height: normal;
-  color: var(--hero-muted);
-  transition: color 0.2s var(--ease-out),
-              background-color 0.3s var(--ease-out);
-}
-
-/* Resume is an <a>, so it arrives with an underline and the UA link colour
-   that the <button> never had. */
-.hero .nav-item--link { text-decoration: none; }
-
-.hero .nav-item:hover { color: var(--hero-ink); }
-
-.hero .nav-item[aria-selected="true"] {
-  background: var(--hero-ink);
-  color: #000000;
-}
-
-.hero .nav-item:focus-visible {
-  outline: 2px solid var(--hero-ink);
-  outline-offset: 4px;
-}
-
-.hero-socials {
-  /* The mirror of .hero-mark's share — see the note there. */
-  flex: 1 1 0;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 32px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.hero-socials a {
-  display: block;
-  color: var(--hero-muted);
-  transition: color 0.2s var(--ease-out),
-              transform 0.3s var(--ease-out);
-}
-
-/* The lift is 2px — enough to feel answered, small enough that three of them
-   in a row do not look like they are bouncing. */
-.hero-socials a:hover,
-.hero-socials a:focus-visible {
-  color: var(--hero-ink);
-  transform: translateY(-2px);
-}
-
-.hero-social-icon { display: block; width: 24px; height: 24px; }
-
-/* Visually hidden, still read aloud — the icons carry no text of their own. */
-.u-sr {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-}
-
-
-
-
-/* Lede + facts -------------------------------------------------- */
-
-.hero-main {
-  display: flex;
-  align-items: stretch;
-  padding-right: 50px;
-}
-
-/* flex:1 with a cap: the column fills the row until it reaches the frame's
-   1162px, and the slack that is left over at very wide sizes falls between
-   this column and the rule, exactly as it does in the frame. */
-.hero-lede-col {
-  flex: 1 1 auto;
-  min-width: 0;
-  max-width: 1162px;
-  padding: 32px var(--hero-gutter);
-}
-
-.hero-lede {
-  margin: 0;
-  /* Flat, not fluid. This was clamp(32px, 3.241vw, 56px) to track the frame's
-     proportion; at 38px it is small enough that scaling it with the viewport
-     buys nothing and only makes it unpredictable. The phone size is set in
-     the 700px block below. */
-  font-size: 38px;
-  font-weight: 500;
-  /* 1.22, not the browser's "normal" (~1.35 for Satoshi). At 38px over four
-     lines the default left the block looking like separate sentences rather
-     than one paragraph. 38 x 1.22 = 46.4px, the same leading
-     aabhakale.design sets on the same size. */
-  line-height: 1.22;
-  letter-spacing: -0.02em;
-  color: var(--hero-ink);
-}
-
-/* Used on both the greeting and the closing clause — see index.html. */
-.hero-lede-dim { color: var(--hero-dim); }
-
-.hero-facts {
-  flex: none;
-  display: flex;
-  flex-direction: column;
-  /* flex-start, plus the same 32px of top padding .hero-lede-col carries, so
-     "ROLES I'M LOOKING FOR" starts on the same line as "hi! i'm Mridul".
-     Centring put the label 32px above the headline whenever this column was
-     the taller of the two, which it is at every width. The padding sits here
-     rather than on .hero-main so the rule still runs the full height. */
-  justify-content: flex-start;
-  padding-top: 32px;
-  /* Matches the lede column's own bottom padding, so the "Previously at" rule
-     clears whichever of the two columns is taller by the same 32px. */
-  padding-bottom: 32px;
-  /* Once the lede column hits its 1162px cap there is slack left in the row.
-     Without this it collects to the RIGHT of this column and drags the rule
-     and the list 54px inboard of the frame at 1728. */
-  margin-left: auto;
-  gap: 56px;
-  /* The frame draws a 1px vector 55px to the left of this column. A border
-     plus padding is the same line without a second image to keep in sync —
-     but border-box is on for everything here, so the width has to carry the
-     rule and the gap as well as the frame's 406px of content. */
-  width: calc(406px + 55px + 1px);
-  padding-left: 55px;
-  border-left: 1px solid var(--hero-rule);
-}
-
-.hero-fact { display: flex; flex-direction: column; gap: 8px; }
-
-.hero-fact-label {
+/* Same eyebrow as HIGHLIGHTS — one rule, two places, so they cannot drift. */
+.highlights-label,
+.cases-eyebrow,
+.comics-eyebrow,
+.connect-eyebrow {
   margin: 0;
   font-size: 12px;
   font-weight: 700;
   line-height: normal;
-  /* Tracking stays in em so it followed the size up: 1.68px here. Uppercase
-     labels need far more air than the -2% the rest of the hero uses. */
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--hero-muted);
-}
-
-.hero-fact-list {
-  margin: 0;
-  padding-left: 24px;
-  list-style: disc;
-  font-size: 17px;
-  font-weight: 500;
-  line-height: 1.45;            /* 24.65px — a wrapped skill stays one block */
-  letter-spacing: -0.02em;
-  color: var(--hero-ink);
-}
-
-/* The 8px is between the items themselves. A margin on the <li> would also
-   push the first one away from the label, which already has its own 8px from
-   .hero-fact — hence the adjacent-sibling selector. */
-.hero-fact-list li + li { margin-top: 8px; }
-
-/* The rule between Roles and Skills. ::before on the second group rather than
-   its own element, so the 56px gap sits either side of it for free. */
-.hero-fact + .hero-fact::before {
-  content: "";
-  display: block;
-  margin-bottom: 48px;          /* 56 gap - 8 of the group's own gap */
-  border-top: 1px solid var(--hero-rule);
-}
-
-
-/* Previously at ------------------------------------------------- */
-
-/* The rule is a border on this row rather than a bottom border on .hero-main,
-   so it stays put when the two columns stack at 1100. The gutter is a margin,
-   not padding, so the rule starts and ends on the same line as the headline. */
-.hero-previously {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 16px;
-  margin: 0 var(--hero-gutter);
-  padding-top: 24px;
-  border-top: 1px solid var(--hero-rule);
-}
-
-.hero-previously-label {
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  color: var(--hero-muted);
-}
-
-.hero-previously-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* 8px of padding on the logo side against 16px on the word side: the logo is a
-   filled circle and reads as its own edge, so matching the two numbers would
-   leave the chip looking lopsided towards the logo. */
-.hero-previously-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  height: 40px;
-  padding: 0 16px 0 8px;
-  border-radius: 50px;
-  background: rgba(255, 255, 255, 0.12);
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  color: var(--hero-ink);
-}
-
-.hero-previously-logo {
-  display: block;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-}
-
-
-/* Highlights ---------------------------------------------------- */
-
-/* White, outside .hero, and the first thing under it. The gutter matches the
-   hero's so the first figure sits on the same left edge as the headline. */
-.highlights {
-  padding: 48px var(--hero-gutter) 56px;
-  background: #ffffff;
-}
-
-/* Type is shared with .cases-eyebrow and set with it, in the Work block near
-   the end of this file. The 32px below it is set there too — a margin here
-   would be overridden by that later rule's shorthand. */
-
-/* Grid, not flex: five equal tracks keep the figures on a rhythm regardless of
-   how long each caption runs. minmax(0, 1fr) rather than 1fr so a long caption
-   cannot push its own column wider than its share. */
-.highlights-grid {
-  display: grid;
-  /* max-content, not 1fr: five equal columns are 229px at 1440, and the
-     longest caption needs 280 — so it broke onto a second line. Each column
-     now takes the width its own caption needs and the leftover is spread
-     evenly between them, which keeps the gaps equal. minmax(0, …) is the
-     guard: below about 1250px the tracks give ground and wrap again rather
-     than pushing the row wider than the page. */
-  grid-template-columns: repeat(5, minmax(0, max-content));
-  justify-content: space-between;
-  gap: 32px 24px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.highlight {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.highlight-figure {
-  font-size: 40px;
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: #000000;
-}
-
-.highlight-caption {
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.4;
-  letter-spacing: -0.01em;
-  color: #000000;
+  /* 3.5:1 on white — clears the large-text floor, and it is a label rather
+     than reading copy. */
+  color: #8a8a8a;
 }
 
 
@@ -1807,377 +1432,68 @@ img { max-width: 100%; display: block; }
 .case-more:hover .case-more-arrow { transform: translate(2px, -2px); }
 
 
-/* Comics -------------------------------------------------------- */
-
-/* Heading on the left, one comic on the right. The intro column is the
-   narrower of the two: the comics are square and want the room. */
-.comics {
-  display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
-  align-items: start;
-  gap: 48px;
-  padding: 72px var(--hero-gutter) 96px;
-  background: #ffffff;
-  border-top: 1px solid var(--border-primary);
-}
-
-.comics-title {
-  max-width: 16ch;
-  margin: 16px 0 0;
-  font-size: 34px;
-  font-weight: 500;
-  line-height: 1.22;
-  letter-spacing: -0.02em;
-  color: #000000;
-}
-
-/* The window. Square, because every comic is. */
-.comics-stage {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  max-width: 500px;
-  /* The 500px cap leaves slack in this column; without this it collected on
-     the right, so the comic sat 181px inboard of the gutter while the heading
-     sat on it. Pushes the stage to the column's right edge instead. */
-  margin-left: auto;
-}
-
-/* An ordinary scroller, so a trackpad, a touchscreen and the keyboard all
-   work before a line of JS runs. The script adds the timer, the dots and
-   mouse dragging on top. */
-.comics-track {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  cursor: grab;
-  /* Without this a drag selects the alt text and the page highlights blue. */
-  user-select: none;
-}
-
-.comics-track::-webkit-scrollbar { display: none; }
-
-/* Snapping has to be off while a pointer drag is driving scrollLeft, or the
-   browser keeps yanking the track back to the nearest slide mid-gesture. The
-   script snaps by hand on release. */
-.comics-track.is-dragging {
-  scroll-snap-type: none;
-  cursor: grabbing;
-}
-
-.comic {
-  flex: 0 0 100%;
-  scroll-snap-align: center;
-}
-
-.comic-art {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1 / 1;
-  object-fit: contain;
-  /* The same edge the case-study cards carry, so the two sections' frames
-     read as one family. */
-  border: 1px solid #aeaeae;
-  background: #ffffff;
-  -webkit-user-drag: none;      /* Safari drags the image itself otherwise */
-}
-
-.comics-dots {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
-
-/* A circle at rest; the active one stretches into a pill of the same height
-   and runs the timer out as a fill, so the wait to the next frame is visible
-   rather than a surprise. */
-.comics-dot {
-  position: relative;
-  width: 8px;
-  height: 8px;
-  padding: 0;
-  border: 0;
-  border-radius: 50px;          /* not 50%, which would turn the pill oval */
-  background: #d4d4d4;
-  overflow: hidden;             /* clips the fill to the pill's own corners */
-  cursor: pointer;
-  transition: width 0.3s var(--ease-out), background-color 0.2s var(--ease-out);
-}
-
-.comics-dot:hover { background: #a3a3a3; }
-
-.comics-dot[aria-selected="true"] {
-  width: 36px;
-  background: #dcdcdc;          /* the track the fill runs along */
-}
-
-.comics-dot-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 0;
-  border-radius: inherit;
-  background: #1c1c1c;
-}
-
-/* --comic-delay is written by script.js from the same constant that drives
-   the timer, so the bar and the step can never fall out of sync. */
-.comics-dot[aria-selected="true"] .comics-dot-fill {
-  /* The fallback only applies if the script never ran, in which case nothing
-     is advancing anyway — DELAY in script.js is the real number. */
-  animation: comic-progress var(--comic-delay, 4000ms) linear forwards;
-}
-
-/* Hover, drag, focus, hidden tab: the timer holds, so the bar holds with it. */
-.comics-dots.is-paused .comics-dot-fill { animation-play-state: paused; }
-
-@keyframes comic-progress {
-  from { width: 0; }
-  to   { width: 100%; }
-}
-
-/* No timer under reduced motion, so there is nothing to count down — the
-   active pill just reads as filled. */
-@media (prefers-reduced-motion: reduce) {
-  .comics-dot[aria-selected="true"] .comics-dot-fill {
-    animation: none;
-    width: 100%;
-  }
-}
 
 
-/* Connect ------------------------------------------------------- */
-
-/* Two panels that each run the full height of the section and meet on a
-   single rule. The left one holds the gutter; the right one is a flat tint
-   that has to reach the window edge, so the padding goes on the panels rather
-   than on the section. */
-.connect {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  background: #ffffff;
-  border-top: 1px solid var(--border-primary);
-}
-
-.connect-main {
-  padding: 72px var(--hero-gutter) 96px;
-}
-
-.connect-title {
-  max-width: 14ch;              /* breaks the phrase over two or three lines */
-  margin: 16px 0 0;
-  /* The same 34px as the Work heading, so the two section headings carry
-     equal weight. It was clamp(40px, 4.4vw, 64px) — 63px at 1440, which made
-     this the loudest thing on the page after the hero. */
-  font-size: 34px;
-  font-weight: 500;
-  line-height: 1.22;
-  letter-spacing: -0.02em;
-  color: #000000;
-}
-
-.connect-lede {
-  max-width: 46ch;
-  margin: 24px 0 0;
-  font-size: 17px;
-  font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: -0.01em;
-  color: var(--content-secondary);
-}
-
-/* The list owns the three columns and each row borrows them through subgrid,
-   so the arrows line up down the whole stack and every value starts on one
-   edge, however long its label runs. A row cannot do this alone: its own
-   max-content tracks only ever measure its own text. */
-.connect-list {
-  display: grid;
-  grid-template-columns: max-content max-content minmax(0, 1fr);
-  gap: 12px;
-  margin: 40px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.connect-list > li {
-  display: grid;
-  grid-column: 1 / -1;
-  grid-template-columns: subgrid;
-}
-
-.connect-row {
-  display: grid;
-  grid-column: 1 / -1;
-  /* The fallback first: where subgrid is not supported the row sizes its own
-     columns, which is ragged but never broken. */
-  grid-template-columns: max-content max-content minmax(0, 1fr);
-  grid-template-columns: subgrid;
-  align-items: baseline;
-  gap: 12px;
-  padding: 20px 24px;
-  border: 1px solid var(--border-primary);
-  text-decoration: none;
-  transition: border-color 0.2s var(--ease-out), background-color 0.2s var(--ease-out);
-}
-
-.connect-row:hover { border-color: #000000; }
-
-.connect-row-label {
-  font-size: 16px;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  color: var(--content-tertiary);
-}
-
-.connect-row-arrow {
-  font-size: 16px;
-  color: var(--content-tertiary);
-}
-
-.connect-row-value {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: #000000;
-  /* A long email or handle shortens rather than widening the row. */
-  overflow-wrap: anywhere;
-}
-
-/* The resume row is the one thing here worth a filled button. */
-.connect-row--primary {
-  border-color: #1c1c1c;
-  background: #1c1c1c;
-}
-.connect-row--primary:hover { border-color: #000000; background: #000000; }
-.connect-row--primary .connect-row-label,
-.connect-row--primary .connect-row-arrow { color: rgba(255, 255, 255, 0.65); }
-.connect-row--primary .connect-row-value { color: #ffffff; }
-
-.connect-aside {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 48px;
-  padding: 72px var(--hero-gutter) 96px;
-  border-left: 1px solid var(--border-primary);
-  background: #f4f4f4;
-}
-
-.connect-shout {
-  margin: 0;
-  font-size: clamp(56px, 7vw, 104px);
-  font-weight: 400;
-  line-height: 1.05;
-  letter-spacing: -0.04em;
-  color: #1c1c1c;
-}
-
-.connect-availability {
-  margin: 0;
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.5;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #8a8a8a;
-}
-
-
-/* Below 1101 the two columns cannot both hold their width: 406px of facts
-   leaves the lede less than half the screen. Same breakpoint the rest of the
-   site already uses to drop to one column. */
 @media (max-width: 1100px) {
-  .hero-bar { flex-wrap: wrap; justify-content: flex-start; gap: 24px; }
-  .hero-socials { margin-left: auto; }
-
-  .hero-main {
-    flex-direction: column;
-    padding-right: 0;
-  }
-
-  .hero-lede-col { max-width: none; width: 100%; }
-
-  .hero-facts {
-    width: 100%;
-    gap: 32px;
-    padding: 0 var(--hero-gutter) 32px;
-    border-left: 0;
-  }
-
-  .hero-fact + .hero-fact::before { margin-bottom: 24px; }
-
-  /* Five columns under 1100 leaves ~170px a column, which breaks every caption
-     onto four lines. Three, then two. */
-  .highlights-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 24px; }
-
-  /* The aside stacks under the panel rather than beside it, so its rule moves
-     from the left edge to the top. */
-  .comics { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-bottom: 64px; }
-  .comics-stage { max-width: none; margin-left: 0; }
-  .comics-title { max-width: none; font-size: 28px; }
-
-  .connect { grid-template-columns: minmax(0, 1fr); }
-  .connect-main { padding-bottom: 64px; }
-  .connect-aside {
-    gap: 32px;
-    padding: 48px var(--hero-gutter) 64px;
-    border-left: 0;
-    border-top: 1px solid var(--border-primary);
-  }
+  .cases-head { align-items: flex-start; }
 }
 
-/* The frame has no phone layout, so this is an invention. The bar breaks into
-   two rows rather than three: the mark and the socials share the first, which
-   is where a reader looks for them, and the tabs get a line of their own
-   instead of being squeezed between them. */
 @media (max-width: 700px) {
-  .hero-bar { gap: 16px 12px; }
-  .hero-mark { order: 1; }
-  .hero-socials { order: 2; margin-left: auto; gap: 20px; }
-
-  /* .hero-nav is the flex child of .hero-bar now, not .nav — ordering .nav
-     here would do nothing, since it is a grandchild. */
-  .hero-nav { order: 3; flex-basis: 100%; gap: 8px; }
-  .hero .nav { gap: 8px; }
-  .hero .nav-item { width: auto; font-size: 18px; }
-
-
-  /* 38px of headline is seven lines on a 375px screen. */
-  .hero-lede { font-size: 26px; }
-
-  /* The label takes a line of its own; without this the first chip sits beside
-     it and the other two wrap under, which reads as two separate rows. */
-  .hero-previously { gap: 12px; }
-  .hero-previously-label { flex-basis: 100%; }
-
-  .highlights { padding: 40px var(--hero-gutter) 48px; }
-
   .cases-section { padding: 48px 0 64px; }
   .cases-title { font-size: 26px; }
   .cases-title-break { display: none; }
   .case { flex-basis: 84vw; }
   .case-card { padding: 20px; }
   .case-title { font-size: 20px; }
-
-  .comics { padding-top: 48px; }
-  .comics-title { font-size: 26px; }
-
-  .connect-main { padding-top: 48px; }
-  .connect-title { max-width: none; }
-  /* The label and the value sit on separate lines on a phone: side by side, a
-     wrapped email left the label stranded beside a two-line block. The track
-     count changes on the list, not the row — the rows are subgrids of it. */
-  .connect-list { grid-template-columns: max-content minmax(0, 1fr); }
-  .connect-row { gap: 8px 10px; padding: 16px 18px; }
-  .connect-row-value { grid-column: 1 / -1; }
-  .highlights-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; }
-  .highlight-figure { font-size: 32px; }
-  .highlight-caption { font-size: 15px; }
 }
+
+
+/* === the Work cards, stacked === */
+
+/* The page already has a column: --d3-gutter puts it at 400px, which is
+   where the avatar, the tabs and the old project cards all sat. The cards
+   take the whole of it, so they land 640px wide at 1440 — the same measure
+   the old pictures had. */
+.cases-section { padding: var(--panel-top) var(--d3-gutter, 48px) 160px; }
+
+/* A column, not a row. Everything that made the row scroll sideways comes
+   off, and the page itself does the scrolling. */
+.cases {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 0;
+  overflow: visible;
+  scroll-snap-type: none;
+}
+
+.case {
+  flex: none;
+  width: 100%;
+  scroll-snap-align: none;
+}
+
+@media (max-width: 1100px) {
+  .cases-section { padding: var(--panel-top) var(--gutter) 96px; }
+  .cases { gap: 28px; }
+  .case  { flex-basis: auto; }
+  .case-card { padding: 20px; }
+  .case-title { font-size: 20px; }
+}
+
+/* Nothing at rest; a grey edge on hover. The border is always THERE, just
+   transparent — colouring an existing border cannot move anything, whereas
+   adding one on hover would nudge 640px of card by a pixel. */
+.case-card {
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  transition: border-color 0.2s var(--ease-out);
+}
+
+.case-card:hover { border-color: #d4d4d4; }
+
+/* The card is not itself a link, so a keyboard reader lands on "Learn more"
+   inside it. Light the card up for them too, or the focused row is the only
+   one with no sign of where it is. */
+.case-card:focus-within { border-color: #d4d4d4; }
